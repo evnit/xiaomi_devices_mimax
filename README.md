@@ -1,1 +1,3 @@
-# xiaomi_devices_mimax
+For Xiaomi devices
+Mi max
+Mi Max Prime
