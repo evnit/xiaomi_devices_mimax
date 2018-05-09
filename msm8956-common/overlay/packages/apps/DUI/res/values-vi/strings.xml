@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--  Copyright (C) 2014-2015 The Dirty Unicorns Project
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ -->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- Bindable action labels -->
+    <string name="label_action_no_action">Không có hành động nào</string>
+    <string name="label_action_settings_panel">bảng điều khiển QS</string>
+    <string name="label_action_notification_panel">Bảng thông báo</string>
+    <string name="label_action_screenshot">Ảnh chụp màn hình</string>
+    <string name="label_action_region_screenshot">Ảnh chụp màn hình một phần</string>
+    <string name="label_action_screenrecord">Màn hình ghi lại</string>
+    <string name="label_action_expanded_desktop">Mở rộng máy tính để bàn</string>
+    <string name="label_action_screen_off">Tắt màn hình</string>
+    <string name="label_action_force_close_app">ép buộc ứng dụng</string>
+    <string name="label_action_search_assistant">trợ lý tìm kiếm</string>
+    <string name="label_action_google_now_on_tap">Trợ lý của Google</string>
+    <string name="label_action_voice_search">Tìm kiếm bằng giọng nói</string>
+    <string name="label_action_in_app_search">Tìm kiếm trong ứng dụng</string>
+    <string name="label_action_flashlight">Đèn pin</string>
+    <string name="label_action_bluetooth">Bluetooth</string>
+    <string name="label_action_wifi">WiFi</string>
+    <string name="label_action_hotspot">Hotspot</string>
+    <string name="label_action_last_app">Ứng dụng mới nhất</string>
+    <string name="label_action_overview">Số lần truy cập</string>
+    <string name="label_action_power_menu">trình đơn Nguồn</string>
+    <string name="label_action_menu">Menu</string>
+    <string name="label_action_back">Trở lại</string>
+    <string name="label_action_home">Trang chủ</string>
+    <string name="label_action_ime_switcher">Trình đổi IME</string>
+    <string name="label_action_stop_screenpinning">Ngừng màn hình ghim</string>
+    <string name="label_action_ime_down">Nhập phương pháp con trỏ xuống</string>
+    <string name="label_action_ime_left">Nhập phương pháp con trỏ chuột</string>
+    <string name="label_action_ime_right">Phương thức nhập liệu con trỏ bên phải</string>
+    <string name="label_action_ime_up">Nhập phương pháp con trỏ lên</string>
+    <string name="label_action_volume_panel">bảng điều khiển âm lượng</string>
+    <string name="label_action_clear_notifications">Xoá thông báo</string>
+    <string name="label_action_editing_smartbar">Trình chỉnh sửa thanh thông minh</string>
+    <string name="label_action_split_screen">Chia màn hình</string>
+    <string name="label_action_one_handed_mode_left">Một chế độ bàn tay (trái)</string>
+    <string name="label_action_one_handed_mode_right">Một chế độ giao dịch (bên phải)</string>
+    <string name="label_action_media_left">Bài hát trước</string>
+    <string name="label_action_media_right">Bài hát tiếp theo</string>
+    <string name="label_action_assistant_sound_search">Tìm kiếm âm thanh của Google</string>
+
+    <!-- Smartbar -->
+<string name="label_smartbar_actions">Hành động</string>
+    <string name="label_smartbar_icon">Biểu tượng</string>
+    <string name="label_smartbar_add">Thêm</string>
+    <string name="label_smartbar_remove">Hủy bỏ</string>
+    <string name="label_smartbar_cancel">Hủy</string>
+    <string name="label_smartbar_finish">Kết thúc</string>
+    <string name="label_smartbar_single_tap">Nhấn đơn</string>
+    <string name="label_smartbar_double_tap">Nhấn đúp</string>
+    <string name="label_smartbar_long_press">Nhấn lâu</string>
+    <string name="label_smartbar_icon_pack">Biểu tượng gói</string>
+    <string name="label_smartbar_icon_gallery">Thư viện</string>
+    <string name="label_smartbar_icon_color">màu</string>
+    <string name="label_smartbar_icon_reset">Đặt lại</string>
+    <string name="smartbar_editor_toast_starting">Bắt đầu trình soạn thảo điều hướng</string>
+    <string name="smartbar_editor_toast_stopping">Ngừng trình biên tập điều hướng</string>
+    <string name="smartbar_editor_toast_unavailable">Trình chỉnh sửa điều hướng không khả dụng</string>
+    <string name="edit_mode">Chế độ chỉnh sửa</string>
+
+    <!-- App killed message -->
+    <string name="app_killed_message">%s đã tắt</string>
+
+    <!-- Pulse and media arrows blacklist -->
+    <string name="navMediaArrowsExcludeList" translatable="false">
+        chrome,youtube,netflix,firefox,dolphin,opera,browser
+    </string>
+</resources>

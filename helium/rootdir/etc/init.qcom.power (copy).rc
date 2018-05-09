@@ -1,0 +1,107 @@
+on boot
+    # Update foreground cpuset now that processors are up
+    write /dev/cpuset/foreground/cpus 0-2,4-7
+    write /dev/cpuset/foreground/boost/cpus 4-7
+    write /dev/cpuset/background/cpus 0
+    write /dev/cpuset/system-background/cpus 0-2
+    write /dev/cpuset/top-app/cpus 0-7
+
+    # add a cpuset for the camera daemon
+    # we want all the little cores for camera
+    mkdir /dev/cpuset/camera-daemon
+    write /dev/cpuset/camera-daemon/cpus 0-3
+    write /dev/cpuset/camera-daemon/mems 0
+    chown system system /dev/cpuset/camera-daemon
+    chown system system /dev/cpuset/camera-daemon/tasks
+    chmod 0664 /dev/cpuset/camera-daemon/tasks
+
+    # Enable sched boost
+    write /proc/sys/kernel/sched_boost 1
+
+on property:sys.boot_completed=1
+    write /sys/class/devfreq/cpubw/governor "bw_hwmon"
+    write /sys/class/devfreq/cpubw/bw_hwmon/io_percent 20
+    write /sys/class/devfreq/cpubw/bw_hwmon/guard_band_mbps 30
+
+    # Disable thermal
+    write /sys/module/msm_thermal/core_control/enabled 0
+
+    # Enable governor
+    write /dev/kmsg "running cpuset governor -> "
+    exec - root root -- /vendor/bin/sh /vendor/bin/cpuset governor
+
+    # Disable sched boost
+    write /proc/sys/kernel/sched_boost 0
+
+    # Enable LPM Prediction
+    write /sys/module/lpm_levels/parameters/lpm_prediction 1
+
+    # Enable Low power modes
+    write /sys/module/lpm_levels/parameters/sleep_disabled 0
+
+    # Bring up all cores online
+    write /sys/devices/vendor/cpu/cpu1/online 1
+    write /sys/devices/vendor/cpu/cpu2/online 1
+    write /sys/devices/vendor/cpu/cpu3/online 1
+    write /sys/devices/vendor/cpu/cpu4/online 1
+    write /sys/devices/vendor/cpu/cpu5/online 1
+    write /sys/devices/vendor/cpu/cpu6/online 1
+    write /sys/devices/vendor/cpu/cpu7/online 1
+
+    # Disable L2 GDHS on 8976
+    write /sys/module/lpm_levels/vendor/a53/a53-l2-gdhs/idle_enabled "N"
+    write /sys/module/lpm_levels/vendor/a72/a72-l2-gdhs/idle_enabled "N"
+
+    # Load and configure core_ctl if enabled
+    write /dev/kmsg "running cpuset core_ctl -> "
+    exec - root root -- /vendor/bin/sh /vendor/bin/cpuset core_ctl
+
+    # Re-enable thermal
+    write /sys/module/msm_thermal/core_control/enabled 1
+
+    # HMP scheduler (big.Little cluster related) settings
+    write /dev/kmsg "running cpuset scheduler -> "
+    exec - root root -- /vendor/bin/sh /vendor/bin/cpuset scheduler
+
+    # LMK & Process reclaim
+    write /dev/kmsg "running cpuset memory -> "
+    exec - root root -- /vendor/bin/sh /vendor/bin/cpuset memory
+
+on charger
+    # Disable thermal
+    write /sys/module/msm_thermal/core_control/enabled 0
+
+    # Configure governor settings for little cluster
+    write /sys/devices/vendor/cpu/cpu0/cpufreq/scaling_governor "powersave"
+    write /sys/devices/vendor/cpu/cpu0/cpufreq/scaling_min_freq 400000
+
+    # Configure governor settings for big cluster
+    write /sys/devices/vendor/cpu/cpu4/online 1
+    write /sys/devices/vendor/cpu/cpu4/cpufreq/scaling_governor "powersave"
+    write /sys/devices/vendor/cpu/cpu4/cpufreq/scaling_min_freq 400000
+
+    # Bring CPUs offline
+    write /sys/devices/vendor/cpu/cpu1/online 0
+    write /sys/devices/vendor/cpu/cpu2/online 0
+    write /sys/devices/vendor/cpu/cpu3/online 0
+    write /sys/devices/vendor/cpu/cpu4/online 0
+    write /sys/devices/vendor/cpu/cpu5/online 0
+    write /sys/devices/vendor/cpu/cpu6/online 0
+    write /sys/devices/vendor/cpu/cpu7/online 0
+
+    # Enable thermal
+    write /sys/module/msm_thermal/core_control/enabled 1
+
+    # Set perfd properties
+    rm /data/vendor/perfd/default_values
+    start perfd
+
+on class_start:late_start
+    trigger enable-low-power
+
+on property:init.svc.recovery=running
+    trigger enable-low-power
+
+on property:dev.bootcomplete=1
+    setprop sys.io.scheduler "fiops"
+

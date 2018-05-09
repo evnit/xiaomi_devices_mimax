@@ -1,0 +1,55 @@
+#!/vendor/bin/sh
+
+# Load/unload/configure core_ctl
+# Configure governor
+
+. /vendor/etc/cpu/cpu.conf
+
+# Settings -> core_ctl -> ON 
+if [ "$1" == "core_ctl" ]; then
+    if [ $(getprop persist.sys.cpu.core_ctl) == "1" ]; then
+        # Load core_ctl module
+        if /vendor/bin/insmod /vendor/lib/modules/core_ctl.ko; then
+            echo "Starting core_ctl... Started."
+        else
+            echo "core_ctl is already running..."
+        fi
+        # Configure core_ctl
+        core_ctl
+    fi
+elif [ "$1" == "online" ]; then
+    # Unload core_ctl module
+    if /vendor/bin/rmmod core_ctl; then
+        echo "Stopping core_ctl... Stopped."
+    else
+        echo "core_ctl is already stopped..."
+    fi
+    # Bring up all cores online
+    online
+elif [ "$1" == "governor" ]; then
+    # Configure governor
+    governor
+    echo "Governor configured..."
+elif [ "$1" == "apply" ]; then
+    # Apply new governor and/or core_ctl configurations
+    governor
+    core_ctl
+    echo "New CPU configuration applied..."
+elif [ "$1" == "memory" ]; then
+    # Set Memory paremeters per CAF
+    configure_memory_parameters
+    restorecon -R /sys/devices/system/cpu
+    echo "Memory paremeters set per CAF..."
+elif [ "$1" == "scheduler" ]; then
+    # HMP scheduler (big.Little cluster related) settings per CAF
+    scheduler
+    echo "Task scheduler settings set per CAF..."
+else
+    echo "usage: cpuset core_ctl -> load and configure core_ctl module if enabled"
+    echo "       cpuset online -> unload module and bring all cores online"
+    echo "       cpuset governor -> configure governor"
+    echo "       cpuset apply -> apply new governor and/or core_ctl configurations"
+    echo "       cpuset memory -> set Memory paremeters"
+    echo "       cpuset scheduler -> set HMP scheduler (big.Little cluster related) settings"
+fi
+
