@@ -388,14 +388,14 @@ PRODUCT_PACKAGES += \
     android.hardware.vibrator@1.0-impl
 
 # Laucher 3
-PRODUCT_PACKAGES += \
-    Launcher3 \
-    Gallery2 \
-    AdAway \
-    Chromium
+#PRODUCT_PACKAGES += \
+#    Launcher3 \
+#    Gallery2 \
+#    AdAway \
+#    Chromium
 
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/pixelbootanimation.zip:system/media/bootanimation.zip
+#PRODUCT_COPY_FILES += \
+#    $(LOCAL_PATH)/pixelbootanimation.zip:system/media/bootanimation.zip
 
 # WiFi HAL
 PRODUCT_PACKAGES += \
@@ -447,9 +447,3 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
     BUILD_VERSION_TAGS="release-keys"
-
-# CameraNextMod
-#PRODUCT_PACKAGES += \
-#    CameraNextMod \
-#    libjni_mosaic_next \
-#    libjni_tinyplanet_next
