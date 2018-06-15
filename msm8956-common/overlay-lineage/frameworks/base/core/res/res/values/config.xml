@@ -27,9 +27,9 @@
             32 - Camera
             64 - Volume rocker
          For example, a device with Home, Back and Menu keys would set this
-         config to 7.         old: 83 
+         config to 7.         old: 83 -->
     <integer name="config_deviceHardwareKeys">83</integer>
 
-    <bool name="config_button_brightness_support">true</bool>-->
+    <bool name="config_button_brightness_support">true</bool>
 
 </resources>
