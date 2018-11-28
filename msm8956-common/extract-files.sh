@@ -1,7 +1,7 @@
 #!/bin/bash
 #
-# Copyright (C) 2016 The CyanogenMod Project
-# Copyright (C) 2017 The LineageOS Project
+# Copyright (C) 2015-2016 The CyanogenMod Project
+#           (C) 2017-2018 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -36,14 +36,13 @@ CLEAN_VENDOR=true
 
 while [ "$1" != "" ]; do
     case $1 in
-        -p | --path )           shift
-                                SRC=$1
+        -n | --no-cleanup )     CLEAN_VENDOR=false
                                 ;;
         -s | --section )        shift
                                 SECTION=$1
                                 CLEAN_VENDOR=false
                                 ;;
-        -n | --no-cleanup )     CLEAN_VENDOR=false
+        * )                     SRC=$1
                                 ;;
     esac
     shift
@@ -64,5 +63,9 @@ if [ -s "$MY_DIR"/../$DEVICE/proprietary-files.txt ]; then
 
     extract "$MY_DIR"/../$DEVICE/proprietary-files.txt "$SRC" "$SECTION"
 fi
+
+COMMON_BLOB_ROOT="$LINEAGE_ROOT"/vendor/"$VENDOR"/"$DEVICE_COMMON"/proprietary
+
+patchelf --replace-needed android.hardware.gnss@1.0.so android.hardware.gnss@1.0-v27.so $COMMON_BLOB_ROOT/vendor/lib64/vendor.qti.gnss@1.0_vendor.so
 
 "$MY_DIR"/setup-makefiles.sh

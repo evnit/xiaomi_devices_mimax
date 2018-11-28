@@ -1,6 +1,6 @@
 #
-# Copyright (C) 2016 The CyanogenMod Project
-# Copyright (C) 2017 The LineageOS Project
+# Copyright (C) 2015-2016 The CyanogenMod Project
+#           (C) 2017-2018 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ VENDOR_PATH := device/xiaomi/msm8956-common
 
 TARGET_SPECIFIC_HEADER_PATH := $(VENDOR_PATH)/include
 
-BOARD_GLOBAL_CFLAGS += -DBATTERY_REAL_INFO
-
 # Architecture
 TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
@@ -29,7 +27,7 @@ TARGET_CPU_ABI2 :=
 TARGET_CPU_VARIANT := cortex-a53
 
 TARGET_2ND_ARCH := arm
-TARGET_2ND_ARCH_VARIANT := armv7-a-neon
+TARGET_2ND_ARCH_VARIANT := armv8-a
 TARGET_2ND_CPU_ABI := armeabi-v7a
 TARGET_2ND_CPU_ABI2 := armeabi
 TARGET_2ND_CPU_VARIANT := cortex-a53.a57
@@ -42,20 +40,23 @@ TARGET_BOARD_PLATFORM_GPU := qcom-adreno510
 TARGET_USES_64_BIT_BINDER := true
 ENABLE_CPUSETS := true
 
+# Shipping API
+PRODUCT_SHIPPING_API_LEVEL := 23
+
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := msm8952
 TARGET_NO_BOOTLOADER := true
 
 # Kernel
 BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci lpm_levels.sleep_disabled=1 ramoops_memreserve=4M
-# BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x01000000 --tags_offset 0x00000100
 BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_HEADER_ARCH := arm64
-TARGET_KERNEL_SOURCE := kernel/xiaomi/msm8956-lineageos
+TARGET_KERNEL_SOURCE := kernel/xiaomi/msm8956
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
 
 # ANT+
@@ -102,35 +103,31 @@ QCOM_BT_USE_SMD_TTY := true
 BOARD_QTI_CAMERA_32BIT_ONLY := true
 USE_DEVICE_SPECIFIC_CAMERA := true
 TARGET_TS_MAKEUP := true
-TARGET_USES_QTI_CAMERA_DEVICE := true
+TARGET_PROCESS_SDK_VERSION_OVERRIDE := \
+    /system/vendor/bin/mm-qcamera-daemon=24
 
 # Charger
 BOARD_CHARGER_ENABLE_SUSPEND := true
-#WITH_CUSTOM_CHARGER := false
-
-# Lineage Hardware
-BOARD_HARDWARE_CLASS += \
-    hardware/lineage/lineagehw \
-    $(VENDOR_PATH)/lineagehw
+WITH_CM_CHARGER := false
 
 # CNE
 BOARD_USES_QCNE := true
 
-# Enable dex-preoptimization to speed up first boot sequence
+# Dex
 ifeq ($(HOST_OS),linux)
   ifneq ($(TARGET_BUILD_VARIANT),eng)
-    WITH_DEXPREOPT := true
-    WITH_DEXPREOPT_DEBUG_INFO := false
-    USE_DEX2OAT_DEBUG := false
-    DONT_DEXPREOPT_PREBUILTS := true
-    WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
+    ifeq ($(WITH_DEXPREOPT),)
+      WITH_DEXPREOPT := true
+    endif
   endif
 endif
+WITH_DEXPREOPT_BOOT_IMG_ONLY ?= true
 
 # Display
 MAX_VIRTUAL_DISPLAY_DIMENSION := 2048
 TARGET_CONTINUOUS_SPLASH_ENABLED := true
 TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
+TARGET_USES_HWC2 := true
 TARGET_USES_C2D_COMPOSITION := true
 TARGET_USES_ION := true
 TARGET_USES_OVERLAY := true
@@ -143,12 +140,11 @@ NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
 SF_VSYNC_EVENT_PHASE_OFFSET_NS := 2000000
 VSYNC_EVENT_PHASE_OFFSET_NS := 6000000
 
-OVERRIDE_RS_DRIVER:= libRSDriver_adreno.so
+# UI
+TARGET_ADDITIONAL_GRALLOC_10_USAGE_BITS := 0x02000000U
 
 # Encryption
 TARGET_HW_DISK_ENCRYPTION := true
-TARGET_EXFAT_DRIVER := exfat
-TARGET_KERNEL_HAVE_EXFAT := true
 
 # Filesystem
 BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
@@ -160,23 +156,27 @@ BOARD_RECOVERYIMAGE_PARTITION_SIZE := 67108864
 
 TARGET_FS_CONFIG_GEN := $(VENDOR_PATH)/config.fs
 
+# HIDL
+DEVICE_MANIFEST_FILE := $(VENDOR_PATH)/manifest.xml
+DEVICE_MATRIX_FILE   := $(VENDOR_PATH)/compatibility_matrix.xml
+
+# exFat
+TARGET_EXFAT_DRIVER := exfat
+
 # FM
 BOARD_HAVE_QCOM_FM := true
 TARGET_QCOM_NO_FM_FIRMWARE := true
 
 # GPS
+TARGET_NO_RPC := true
 USE_DEVICE_SPECIFIC_GPS := true
 USE_DEVICE_SPECIFIC_LOC_API := true
-TARGET_NO_RPC := true
+BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := $(TARGET_BOARD_PLATFORM)
 
 # Init
 TARGET_INIT_VENDOR_LIB := libinit_msm
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
 TARGET_RECOVERY_DEVICE_MODULES := libinit_msm
-
-# HIDL
-DEVICE_MANIFEST_FILE := $(VENDOR_PATH)/manifest.xml
-DEVICE_MATRIX_FILE   := $(VENDOR_PATH)/compatibility_matrix.xml
 
 # Keymaster
 TARGET_PROVIDES_KEYMASTER := true
@@ -185,6 +185,9 @@ TARGET_PROVIDES_KEYMASTER := true
 BOARD_LIGHTS_VARIANT := aw2013
 TARGET_PROVIDES_LIBLIGHT := true
 
+# Lineage Hardware
+JAVA_SOURCE_OVERLAYS := org.pixelexperience.keydisabler|$(VENDOR_PATH)/keydisabler|**/*.java
+
 # Media
 TARGET_USES_MEDIA_EXTENSIONS := true
 
@@ -192,15 +195,14 @@ TARGET_USES_MEDIA_EXTENSIONS := true
 TARGET_PER_MGR_ENABLED := true
 
 # Power
-TARGET_POWERHAL_VARIANT := qcom
+TARGET_HAS_NO_WLAN_STATS := true
+TARGET_RPM_SYSTEM_STAT := /d/rpm_stats
 
 # Properties
 TARGET_SYSTEM_PROP += $(VENDOR_PATH)/system.prop
 
 # Qualcomm
 BOARD_USES_QCOM_HARDWARE := true
-# BOARD_USES_QC_TIME_SERVICES := true
-TARGET_USE_SDCLANG := true
 
 # Recovery
 TARGET_RECOVERY_FSTAB := $(VENDOR_PATH)/rootdir/etc/fstab.qcom
@@ -212,9 +214,9 @@ OVERRIDE_RS_DRIVER:= libRSDriver_adreno.so
 USE_OPENGL_RENDERER := true
 
 # RIL
+TARGET_PROVIDES_QTI_TELEPHONY_JAR := true
 PROTOBUF_SUPPORTED := true
 TARGET_RIL_VARIANT := caf
-BOARD_PROVIDES_LIBRIL := true
 
 # Tap-to-Wake
 TARGET_TAP_TO_WAKE_NODE := "/proc/touchpanel/double_tap_enable"
@@ -222,15 +224,17 @@ TARGET_TAP_TO_WAKE_NODE := "/proc/touchpanel/double_tap_enable"
 # Sensors
 USE_SENSOR_MULTI_HAL := true
 
+# Shims
+TARGET_LD_SHIM_LIBS := \
+    /system/lib64/lib-imsvideocodec.so|libshim_ims.so
+
 # SELinux
-include device/qcom/sepolicy/sepolicy.mk
-include device/qcom/sepolicy/legacy-sepolicy.mk
-BOARD_SEPOLICY_DIRS += \
-    $(VENDOR_PATH)/sepolicy \
-    $(VENDOR_PATH)/legacy-common
+#include device/qcom/sepolicy/sepolicy.mk
+#BOARD_SEPOLICY_DIRS += $(VENDOR_PATH)/sepolicy
 
 # Wifi
 WPA_SUPPLICANT_VERSION      := VER_0_8_X
+# BOARD_USES_AOSP_WLAN_HAL    := true
 BOARD_HAS_QCOM_WLAN         := true
 BOARD_HAS_QCOM_WLAN_SDK     := true
 BOARD_WLAN_DEVICE           := qcwcn

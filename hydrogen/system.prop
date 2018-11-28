@@ -1,18 +1,22 @@
 # Audio
 audio.offload.disable=1
-audio.offload.pcm.16bit.enable=false
-audio.offload.pcm.24bit.enable=false
-audio.offload.video=false
+audio.offload.pcm.16bit.enable=true
+audio.offload.pcm.24bit.enable=true
+audio.offload.video=true
 persist.audio.fluence.audiorec=false
 persist.audio.fluence.spk.mono=true
-persist.audio.fluence.voicerec=true
+persist.audio.fluence.voicerec=false
 voice.voip.conc.disabled=true
 
-# Radio
-persist.radio.cs_srv_type=1
-persist.radio.force_on_dc=true
-persist.radio.redir_party_num=0
-persist.radio.start_ota_daemon=1
+# Display
+ro.qcom.ad=1
+ro.qcom.ad.calib.data=/system/etc/calib.cfg
+ro.qcom.ad.sensortype=2
+ro.qualcomm.cabl=0
+
+# Display feature support
+# bit0-ColorPrefer bit1-EyeCare bit2-AD bit3-CE bit4-CABC bit5-SRGB
+ro.sys.display.support=63
 
 # Fingerprint
 ro.hardware.fingerprint=fpc

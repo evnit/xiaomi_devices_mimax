@@ -22,7 +22,7 @@ etc/acdbdata/MTP/msm8976-tasha-snd-card/MTP_WCD9335_Headset_cal.acdb
 etc/acdbdata/MTP/msm8976-tasha-snd-card/MTP_WCD9335_Speaker_cal.acdb
 
 # Camera
-bin/mm-qcamera-daemon
+vendor/bin/mm-qcamera-daemon
 etc/age_gender_bg
 etc/android_model_facea.dat
 etc/android_model_faceg.dat
@@ -294,125 +294,12 @@ vendor/lib/libmmcamera_s5k5e8_qtec.so
 etc/pp_calib_data_auo_r61322_1080p_video_mode_dsi_panel.xml
 etc/pp_calib_data_tianma_r63350_1080p_video_mode_dsi_panel.xml
 
-# DRM
-bin/qseecomd
-vendor/bin/qseeproxydaemon
-vendor/lib64/lib-sec-disp.so
-vendor/lib64/libdrmfs.so
-vendor/lib64/libdrmtime.so
-vendor/lib64/libGPreqcancel.so
-vendor/lib64/libGPreqcancel_svc.so
-vendor/lib64/libqisl.so
-vendor/lib64/libQSEEComAPI.so
-vendor/lib64/librpmb.so
-vendor/lib64/libsecureui.so
-vendor/lib64/libsecureui_svcsock.so
-vendor/lib64/libSecureUILib.so
-vendor/lib64/libssd.so
-vendor/lib64/libStDrvInt.so
-vendor/lib/libQSEEComAPI.so
-
 # Fingerprint sensor
 lib64/hw/fingerprint.fpc.so
 lib64/lib_fpc_tac_shared.so
 lib/hw/fingerprint.fpc.so
 lib/lib_fpc_tac_shared.so
 
-# QMI
-bin/irsc_util
-etc/data/dsi_config.xml
-etc/data/netmgr_config.xml
-etc/data/qmi_config.xml
-etc/permissions/qti_permissions.xml
--lib64/libqminvapi.so
--lib/libqminvapi.so
-vendor/lib64/libdiag.so
-vendor/lib64/libdsi_netctrl.so
-vendor/lib64/libdsutils.so
-vendor/lib64/libidl.so
-vendor/lib64/libqcci_legacy.so
-vendor/lib64/libqdi.so
-vendor/lib64/libqdp.so
-vendor/lib64/libqmi.so
-vendor/lib64/libqmi_cci.so
-vendor/lib64/libqmi_client_helper.so
-vendor/lib64/libqmi_client_qmux.so
-vendor/lib64/libqmi_common_so.so
-vendor/lib64/libqmi_csi.so
-vendor/lib64/libqmi_encdec.so
-vendor/lib64/libqmiservices.so
-vendor/lib64/libsmemlog.so
-vendor/lib/libdiag.so
-vendor/lib/libdsi_netctrl.so
-vendor/lib/libdsutils.so
-vendor/lib/libidl.so
-vendor/lib/libqcci_legacy.so
-vendor/lib/libqdi.so
-vendor/lib/libqdp.so
-vendor/lib/libqmi.so
-vendor/lib/libqmi_cci.so
-vendor/lib/libqmi_client_helper.so
-vendor/lib/libqmi_client_qmux.so
-vendor/lib/libqmi_common_so.so
-vendor/lib/libqmi_csi.so
-vendor/lib/libqmi_encdec.so
-vendor/lib/libqmiservices.so
-vendor/lib/libsmemlog.so
-
-# Radio
--app/embms/embms.apk:app/embms/embms.apk:PRESIGNED
--app/fastdormancy/fastdormancy.apk:app/fastdormancy/fastdormancy.apk:PRESIGNED
--app/shutdownlistener/shutdownlistener.apk:app/shutdownlistener/shutdownlistener.apk:PRESIGNED
-bin/mmbn-daemon
-bin/netmgrd
-bin/qmuxd
-bin/radish
-bin/rmt_storage
-bin/tftp_server
-etc/permissions/embms.xml
-etc/permissions/qcnvitems.xml
-etc/permissions/qcrilhook.xml
-etc/modem/Diag.cfg
-framework/embmslibrary.jar
--framework/qcnvitems.jar:framework/qcnvitems.jar:PRESIGNED
--framework/qcrilhook.jar:framework/qcrilhook.jar:PRESIGNED
--priv-app/qcrilmsgtunnel/qcrilmsgtunnel.apk:priv-app/qcrilmsgtunnel/qcrilmsgtunnel.apk:PRESIGNED
-vendor/lib64/libconfigdb.so
-vendor/lib64/liblqe.so
-vendor/lib64/libmdmdetect.so
-vendor/lib64/libnetmgr.so
-vendor/lib64/libqcmaputils.so
-vendor/lib64/libril-qc-ltedirectdisc.so
-vendor/lib64/libril-qc-qmi-1.so
-vendor/lib64/libril-qc-radioconfig.so
-vendor/lib64/libril-qcril-hook-oem.so
-vendor/lib64/librilqmiservices.so
-vendor/lib64/libsettings.so|4609cacca0a56dae2596687c8f5f2f9423d4d0d9
-vendor/lib64/libsystem_health_mon.so
-vendor/lib/liblqe.so
-vendor/lib/libmdmdetect.so
-vendor/lib/libqcmaputils.so
-vendor/qcril.db
-
-# Time services
--app/TimeService/TimeService.apk:app/TimeService/TimeService.apk:PRESIGNED
-bin/time_daemon
-vendor/lib64/libTimeService.so
--vendor/lib64/libtime_genoff.so
-vendor/lib/libTimeService.so
--vendor/lib/libtime_genoff.so
-
-# WiFi
-bin/wcnss_service
-
-# Thermal
-etc/thermal-engine-8956.conf
-etc/thermal-engine-8976.conf
-vendor/etc/perf-profile0.conf
-vendor/etc/perf-profile1.conf
-vendor/etc/perf-profile2.conf
-vendor/etc/perf-profile3.conf
-vendor/etc/perf-profile4.conf
-vendor/etc/perf-profile5.conf
-vendor/etc/perf-profile6.conf
-
+# Sensors
+etc/sensors/hals.conf:vendor/etc/sensors/hals.conf
+etc/sensors/sensor_def_qcomdev.conf
