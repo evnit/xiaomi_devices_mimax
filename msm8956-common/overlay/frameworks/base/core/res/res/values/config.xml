@@ -275,7 +275,10 @@
             16 - App switch
          For example, a device with Home, Back and Menu keys would set this
          config to 19. -->
-    <integer name="config_deviceHardwareKeys">19</integer>
+    <integer name="config_deviceHardwareKeys">83</integer>
+
+    <!-- Boolean indicating whether we want button brightness support --> 
+    <bool name="config_button_brightness_support">true</bool>
 
     <!-- Minimum screen brightness setting allowed by the power manager.
          The user is forbidden from setting the brightness below this level. -->
