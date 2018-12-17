@@ -22,7 +22,7 @@ etc/acdbdata/MTP/msm8976-tasha-snd-card/MTP_WCD9335_Headset_cal.acdb
 etc/acdbdata/MTP/msm8976-tasha-snd-card/MTP_WCD9335_Speaker_cal.acdb
 
 # Camera
-vendor/bin/mm-qcamera-daemon
+bin/mm-qcamera-daemon
 etc/age_gender_bg
 etc/android_model_facea.dat
 etc/android_model_faceg.dat
@@ -52,7 +52,7 @@ vendor/lib/libmmcamera2_dcrf.so
 vendor/lib/libmmcamera2_frame_algorithm.so
 vendor/lib/libmmcamera2_iface_modules.so
 vendor/lib/libmmcamera2_imglib_modules.so
-vendor/lib/libmmcamera2_isp_modules.so|3e6295cba58ad5ec7e6f58eb9839f7ca7a2a6224
+vendor/lib/libmmcamera2_isp_modules.so
 vendor/lib/libmmcamera2_is.so
 vendor/lib/libmmcamera2_mct.so
 vendor/lib/libmmcamera2_pp_buf_mgr.so

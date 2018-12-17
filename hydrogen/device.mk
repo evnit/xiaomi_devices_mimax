@@ -44,7 +44,8 @@ PRODUCT_COPY_FILES += \
 
 # Ramdisk
 PRODUCT_PACKAGES += \
-    init.hydrogen.rc
+    init.hydrogen.rc \
+    init.qcom.post_boot.sh
 
 # Wifi
 PRODUCT_COPY_FILES += \

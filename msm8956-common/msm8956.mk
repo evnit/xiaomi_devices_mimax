@@ -18,6 +18,7 @@
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay-lineage
+#DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay-pixel
 
 # Get non-open-source specific aspects
 $(call inherit-product-if-exists, vendor/xiaomi/msm8956-common/msm8956-common-vendor.mk)
@@ -135,7 +136,9 @@ PRODUCT_PACKAGES += \
     camera.device@3.2-impl \
     camera.msm8952 \
     libqomx_core \
-    Camera2 \
+    GoogleCamera \
+    Snap \
+    SnapdragonCamera \
     vendor.qti.hardware.camera.device@1.0 \
     vendor.qti.hardware.camera.device@1.0_vendor
 
@@ -276,7 +279,8 @@ PRODUCT_PACKAGES += \
 
 # Lights
 PRODUCT_PACKAGES += \
-    android.hardware.light@2.0-service.aw2013
+    android.hardware.light@2.0-service.aw2013 \
+    android.hardware.light@2.0-impl
 
 # Media
 PRODUCT_COPY_FILES += \
@@ -328,8 +332,7 @@ PRODUCT_PACKAGES += \
 # Ramdisk
 PRODUCT_PACKAGES += \
     fstab.qcom \
-    init.qcom.sh \
-    init.qcom.post_boot.sh
+    init.qcom.sh
 
 PRODUCT_PACKAGES += \
     init.qcom.rc \
@@ -356,7 +359,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     android.hardware.sensors@1.0-impl \
     android.hardware.sensors@1.0-service \
-    sensors.msm8952
+    libsensorndkbridge
 
 # TextClassifier smart selection model files
 PRODUCT_PACKAGES += \
@@ -418,7 +421,6 @@ PRODUCT_PACKAGES += \
     libqsap_sdk \
     libQWiFiSoftApCfg \
     libwpa_client \
-    wificond \
     hostapd \
     wificond \
     wpa_supplicant \

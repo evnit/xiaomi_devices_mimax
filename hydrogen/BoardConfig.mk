@@ -23,6 +23,9 @@ DEVICE_PATH := device/xiaomi/hydrogen
 # Assertions
 TARGET_OTA_ASSERT_DEVICE := hydrogen
 
+# Shipping API
+PRODUCT_SHIPPING_API_LEVEL := 23
+
 # Bluetooth
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(DEVICE_PATH)/bluetooth
 
