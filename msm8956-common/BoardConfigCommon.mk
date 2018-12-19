@@ -104,7 +104,7 @@ BOARD_QTI_CAMERA_32BIT_ONLY := true
 USE_DEVICE_SPECIFIC_CAMERA := true
 TARGET_TS_MAKEUP := true
 TARGET_PROCESS_SDK_VERSION_OVERRIDE := \
-    /system/bin/mm-qcamera-daemon=24
+    /system/bin/mm-qcamera-daemon=23
 
 # Charger
 BOARD_CHARGER_ENABLE_SUSPEND := true
@@ -224,6 +224,10 @@ TARGET_TAP_TO_WAKE_NODE := "/proc/touchpanel/double_tap_enable"
 
 # Sensors
 USE_SENSOR_MULTI_HAL := true
+
+# Shims
+TARGET_LD_SHIM_LIBS := \
+    /system/lib64/lib-imsvideocodec.so|libshim_ims.so
 
 # SELinux
 #include device/qcom/sepolicy/sepolicy.mk
