@@ -1,13 +1,10 @@
-Copyright (C) 2015-2016 The CyanogenMod Project
-          (C) 2017-2018 The LineageOS Project
-
-Device Tree for Xiaomi Mi Max Prime (helium)
+Device Tree for Xiaomi Mi Max (helium)
 ===========================================
 
 Basic   | Spec Sheet
 -------:|:-------------------------
 CPU     | Quad-core 1.4 GHz Cortex-A53 & Dual-core 1.8 GHz Cortex-A72
-Chipset | Qualcomm MSM8956 Snapdragon 652
+Chipset | Qualcomm MSM8956 Snapdragon 650
 GPU     | Adreno 510
 Memory  | 2GB/3GB DDR3 Dual-channel
 Storage | 16GB/32GB

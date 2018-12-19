@@ -11436,7 +11436,6 @@ int32_t QCameraParameters::bundleRelatedCameras(bool sync,
         rc = m_pCamOpsTbl->ops->sync_related_sensors(
                 m_pCamOpsTbl->camera_handle, m_pRelCamSyncBuf);
     } else {
-
         ALOGE("%s: Related Cam SyncBuffer not allocated rc=%d", __func__, rc);
         return NO_INIT;
     }
