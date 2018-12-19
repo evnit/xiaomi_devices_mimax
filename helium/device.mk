@@ -19,7 +19,7 @@
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
 # call the proprietary setup
-$(call inherit-product-if-exists, vendor/xiaomi/hydrogen/hydrogen-vendor.mk)
+$(call inherit-product-if-exists, vendor/xiaomi/helium/helium-vendor.mk)
 
 # Audio
 PRODUCT_COPY_FILES += \
