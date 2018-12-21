@@ -1,6 +1,6 @@
 #
-# Copyright (C) 2016 The CyanogenMod Project
-# Copyright (C) 2017 The LineageOS Project
+# Copyright (C) 2015-2016 The CyanogenMod Project
+#           (C) 2017-2018 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,18 +15,9 @@
 # limitations under the License.
 #
 
-# This contains the module build definitions for the hardware-specific
-# components for this device.
-#
-# As much as possible, those components should be built unconditionally,
-# with device-specific names to avoid collisions, to avoid device-specific
-# bitrot and build breakages. Building a component unconditionally does
-# *not* include it on all devices, so it is safe even with hardware-specific
-# components.
-
 LOCAL_PATH := $(call my-dir)
 
-ifneq ($(filter hydrogen helium kenzo,$(TARGET_DEVICE)),)
+ifneq ($(filter hydrogen helium,$(TARGET_DEVICE)),)
 
 include $(call all-makefiles-under,$(LOCAL_PATH))
 
@@ -80,13 +71,11 @@ $(RFS_MSM_SLPI_SYMLINKS): $(LOCAL_INSTALLED_MODULE)
 
 ALL_DEFAULT_INSTALLED_MODULES += $(RFS_MSM_ADSP_SYMLINKS) $(RFS_MSM_MPSS_SYMLINKS) $(RFS_MSM_SLPI_SYMLINKS)
 
-WCNSS_INI_SYMLINK := $(TARGET_OUT_ETC)/firmware/wlan/prima/WCNSS_qcom_cfg.ini
-$(WCNSS_INI_SYMLINK): $(LOCAL_INSTALLED_MODULE)
-	@echo "WCNSS config ini link: $@"
+WCNSS_CFG_SYMLINK := $(TARGET_OUT_VENDOR)/firmware/wlan/prima/WCNSS_qcom_cfg.ini
+$(WCNSS_CFG_SYMLINK): $(LOCAL_INSTALLED_MODULE)
 	@mkdir -p $(dir $@)
-	@rm -rf $@
 	$(hide) ln -sf /data/misc/wifi/$(notdir $@) $@
 
-ALL_DEFAULT_INSTALLED_MODULES += $(WCNSS_INI_SYMLINK)
+ALL_DEFAULT_INSTALLED_MODULES += $(WCNSS_CFG_SYMLINK)
 
 endif

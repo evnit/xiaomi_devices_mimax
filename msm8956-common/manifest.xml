@@ -36,13 +36,14 @@
         </interface>
     </hal>
     <hal format="hidl">
+        <name>android.hardware.broadcastradio</name>
+        <transport arch="32+64">passthrough</transport>
+        <version>1.0</version>
+    </hal>
+    <hal format="hidl">
         <name>android.hardware.camera.provider</name>
         <transport>hwbinder</transport>
         <version>2.4</version>
-        <interface>
-            <name>ICameraProvider</name>
-            <instance>legacy/0</instance>
-        </interface>
     </hal>
     <hal format="hidl">
         <name>android.hardware.cas</name>
@@ -79,22 +80,17 @@
     </hal>
     <hal format="hidl">
         <name>android.hardware.gatekeeper</name>
-        <transport>hwbinder</transport>
+        <transport arch="32+64">passthrough</transport>
         <version>1.0</version>
-        <interface>
-            <name>IGatekeeper</name>
-            <instance>default</instance>
-        </interface>
     </hal>
     <hal format="hidl">
         <name>android.hardware.gnss</name>
         <transport>hwbinder</transport>
-        <version>1.0</version>
+        <version>1.1</version>
         <interface>
             <name>IGnss</name>
             <instance>default</instance>
-            <fqname>@1.0::IGnss/default</fqname>
-            <fqname>@1.0::IGnss/gnss_vendor</fqname>
+            <instance>gnss_vendor</instance>
         </interface>
     </hal>
     <hal format="hidl">
@@ -110,10 +106,6 @@
         <name>android.hardware.graphics.composer</name>
         <transport>hwbinder</transport>
         <version>2.1</version>
-        <interface>
-            <name>IComposer</name>
-            <instance>default</instance>
-        </interface>
     </hal>
     <hal format="hidl">
         <name>android.hardware.graphics.mapper</name>
@@ -135,7 +127,7 @@
     </hal>
     <hal format="hidl">
         <name>android.hardware.ir</name>
-        <transport>hwbinder</transport>
+        <transport arch="32+64">passthrough</transport>
         <version>1.0</version>
         <interface>
             <name>IConsumerIr</name>
@@ -144,12 +136,8 @@
     </hal>
     <hal format="hidl">
         <name>android.hardware.keymaster</name>
-        <transport>hwbinder</transport>
+        <transport arch="32+64">passthrough</transport>
         <version>3.0</version>
-        <interface>
-            <name>IKeymasterDevice</name>
-            <instance>default</instance>
-        </interface>
     </hal>
     <hal format="hidl">
         <name>android.hardware.light</name>
@@ -183,9 +171,18 @@
         </interface>
     </hal>
     <hal format="hidl">
-        <name>android.hardware.radio</name>
+        <name>android.hardware.power</name>
         <transport>hwbinder</transport>
         <version>1.1</version>
+        <interface>
+            <name>IPower</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>android.hardware.radio</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
         <interface>
             <name>IRadio</name>
             <instance>slot1</instance>
@@ -211,10 +208,6 @@
         <name>android.hardware.renderscript</name>
         <transport arch="32+64">passthrough</transport>
         <version>1.0</version>
-        <interface>
-            <name>IDevice</name>
-            <instance>default</instance>
-        </interface>
     </hal>
     <hal format="hidl">
         <name>android.hardware.sensors</name>
@@ -231,6 +224,15 @@
         <version>2.1</version>
         <interface>
             <name>ISoundTriggerHw</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>android.hardware.thermal</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>IThermal</name>
             <instance>default</instance>
         </interface>
     </hal>
@@ -262,15 +264,6 @@
         </interface>
     </hal>
     <hal format="hidl">
-        <name>android.hardware.wifi.hostapd</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IHostapd</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="hidl">
         <name>android.hardware.wifi.supplicant</name>
         <transport>hwbinder</transport>
         <version>1.1</version>
@@ -279,14 +272,14 @@
             <instance>default</instance>
         </interface>
     </hal>
-    <hal format="hidl">	
-        <name>com.qualcomm.qti.dpm.api</name>	
-        <transport>hwbinder</transport>	
-        <version>1.0</version>	
-        <interface>	
-            <name>IdpmQmi</name>	
-            <instance>dpmQmiService</instance>	
-        </interface>	
+    <hal format="hidl">
+        <name>com.qualcomm.qti.dpm.api</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>IdpmQmi</name>
+            <instance>dpmQmiService</instance>
+        </interface>
     </hal>
     <hal format="hidl">
         <name>com.qualcomm.qti.imscmservice</name>
@@ -325,32 +318,56 @@
         </interface>
     </hal>
     <hal format="hidl">
-        <name>vendor.qti.gnss</name>
+        <name>vendor.lineage.power</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
         <interface>
-            <name>ILocHidlGnss</name>
-            <instance>gnss_vendor</instance>
-        </interface>
-        <fqname>@1.0::ILocHidlGnss/gnss_vendor</fqname>
-    </hal>
- 
-   <!-- Thermal HAL Service -->
-    <hal format="hidl">
-        <name>android.hardware.thermal</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IThermal</name>
+            <name>ILineagePower</name>
             <instance>default</instance>
         </interface>
     </hal>
     <hal format="hidl">
-        <name>android.hardware.vr</name>
+        <name>vendor.qti.data.factory</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
         <interface>
-            <name>IVr</name>
+            <name>IFactory</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.qti.hardware.alarm</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>IAlarm</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.qti.gnss</name>
+        <transport>hwbinder</transport>
+        <version>1.2</version>
+        <interface>
+            <name>ILocHidlGnss</name>
+            <instance>gnss_vendor</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.qti.gnss</name>
+        <transport>hwbinder</transport>
+        <version>2.0</version>
+        <interface>
+            <name>ILocHidlGnss</name>
+            <instance>gnss_vendor</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
+        <name>vendor.qti.hardware.data.latency</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>ILinkLatency</name>
             <instance>default</instance>
         </interface>
     </hal>

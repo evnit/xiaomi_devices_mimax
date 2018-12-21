@@ -1,11 +1,12 @@
 #
-# Copyright (C) 2016 The CyanogenMod Project
+# Copyright (C) 2015-2016 The CyanogenMod Project
+#           (C) 2017-2018 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-# http://www.apache.org/licenses/LICENSE-2.0
+#      http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,7 +19,7 @@
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
 # call the proprietary setup
-$(call inherit-product-if-exists, vendor/xiaomi/hydrogen/hydrogen-vendor.mk)
+$(call inherit-product-if-exists, vendor/xiaomi/helium/helium-vendor.mk)
 
 # Audio
 PRODUCT_COPY_FILES += \
@@ -43,12 +44,8 @@ PRODUCT_COPY_FILES += \
 
 # Ramdisk
 PRODUCT_PACKAGES += \
-    init.helium.rc
-
-# Sensors
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/sensors/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf \
-    $(LOCAL_PATH)/configs/sensors/sensor_def_qcomdev.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/sensor_def_qcomdev.conf
+    init.helium.rc \
+    init.qcom.post_boot.sh
 
 # Wifi
 PRODUCT_COPY_FILES += \

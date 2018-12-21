@@ -1,6 +1,6 @@
 #
-# Copyright (C) 2016 The CyanogenMod Project
-# Copyright (C) 2017-2018 The LineageOS Project
+# Copyright (C) 2015-2016 The CyanogenMod Project
+#           (C) 2017-2018 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +17,8 @@
 
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
-
+DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay-lineage
+# DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay-pixel
 
 # Get non-open-source specific aspects
 $(call inherit-product-if-exists, vendor/xiaomi/msm8956-common/msm8956-common-vendor.mk)
@@ -26,7 +27,10 @@ $(call inherit-product-if-exists, vendor/xiaomi/msm8956-common/msm8956-common-ve
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
-$(call inherit-product, vendor/nitrogen/config/phone-xxhdpi-2048-hwui-memory.mk)
+# Boot animation
+TARGET_BOOTANIMATION_HALF_RES := true
+TARGET_SCREEN_HEIGHT := 1920
+TARGET_SCREEN_WIDTH := 1080
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -55,7 +59,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.usb.host.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.host.xml \
     frameworks/native/data/etc/android.hardware.vulkan.compute-0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.compute-0.xml \
     frameworks/native/data/etc/android.hardware.vulkan.level-0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.level-0.xml \
-    frameworks/native/data/etc/android.hardware.vulkan.version-1_1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.version-1_1.xml \
+    frameworks/native/data/etc/android.hardware.vulkan.version-1_1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.version-1_0_3.xml \
     frameworks/native/data/etc/android.hardware.wifi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.xml \
     frameworks/native/data/etc/android.hardware.wifi.direct.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.direct.xml \
     frameworks/native/data/etc/android.software.midi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.midi.xml \
@@ -78,10 +82,17 @@ PRODUCT_COPY_FILES += \
 
 # Audio
 PRODUCT_PACKAGES += \
-    android.hardware.audio@4.0-impl \
+    android.hardware.audio@2.0-impl \
     android.hardware.audio@2.0-service \
-    android.hardware.audio.effect@4.0-impl \
+    android.hardware.audio@4.0 \
+    android.hardware.audio@4.0-impl \
+    android.hardware.audio.common@4.0 \
+    android.hardware.audio.common@4.0-util \
+    android.hardware.audio.effect@2.0-impl \
     android.hardware.audio.effect@2.0-service \
+    android.hardware.audio.effect@4.0 \
+    android.hardware.audio.effect@4.0-impl \
+    android.hardware.broadcastradio@1.0-impl \
     android.hardware.soundtrigger@2.1-impl \
     android.hardware.soundtrigger@2.1-service \
     audio.a2dp.default \
@@ -98,6 +109,7 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/aanc_tuning_mixer.txt:$(TARGET_COPY_OUT_VENDOR)/etc/aanc_tuning_mixer.txt \
+    $(LOCAL_PATH)/audio/aanc_tuning_mixer_wcd9330.txt:$(TARGET_COPY_OUT_VENDOR)/etc/aanc_tuning_mixer_wcd9330.txt \
     $(LOCAL_PATH)/audio/aanc_tuning_mixer_wcd9335.txt:$(TARGET_COPY_OUT_VENDOR)/etc/aanc_tuning_mixer_wcd9335.txt \
     $(LOCAL_PATH)/audio/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
     $(LOCAL_PATH)/audio/audio_output_policy.conf:$(TARGET_COPY_OUT_VENDOR)/etc/audio_output_policy.conf \
@@ -114,7 +126,8 @@ PRODUCT_COPY_FILES += \
 
 # Bluetooth
 PRODUCT_PACKAGES += \
-    android.hardware.bluetooth@1.0-service 
+    android.hardware.bluetooth@1.0-service \
+    libbt-vendor
 
 # Camera
 PRODUCT_PACKAGES += \
@@ -124,11 +137,11 @@ PRODUCT_PACKAGES += \
     camera.msm8952 \
     libqomx_core \
     GoogleCamera \
-    SnapdragonCamera \
     vendor.qti.hardware.camera.device@1.0 \
     vendor.qti.hardware.camera.device@1.0_vendor
 
-PRODUCT_COPY_FILES +=  \
+# Camera
+PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml
 
 # Connectivity Engine support (CNE)
@@ -137,11 +150,17 @@ PRODUCT_PACKAGES += \
 
 # Consumerir
 PRODUCT_PACKAGES += \
-    android.hardware.ir@1.0-service-custom
+    android.hardware.ir@1.0-impl \
+    consumerir.msm8952
 
 # DataServices
 PRODUCT_PACKAGES += \
     librmnetctl
+
+# DRM
+PRODUCT_PACKAGES += \
+    android.hardware.drm@1.0-impl \
+    android.hardware.drm@1.0-service
 
 # Display
 PRODUCT_PACKAGES += \
@@ -158,24 +177,14 @@ PRODUCT_PACKAGES += \
     memtrack.msm8952 \
     libdisplayconfig \
     liboverlay \
-    libqdMetaData \
     libqdMetaData.system \
     libgenlock \
     vendor.display.config@1.0 \
     vendor.display.config@1.0_vendor
 
-# DRM
-PRODUCT_PACKAGES += \
-    android.hardware.drm@1.0-impl \
-    android.hardware.drm@1.0-service
-
 # Doze mode
 PRODUCT_PACKAGES += \
     XiaomiDoze
-
-# Device features
-PRODUCT_PACKAGES += \
-    XiaomiParts
 
 # Face detection extension
 PRODUCT_PACKAGES += \
@@ -188,10 +197,8 @@ PRODUCT_PACKAGES += \
 
 # FM
 PRODUCT_PACKAGES += \
-    FM2 \
-    libqcomfm_jni \
-    qcom.fmradio \
-    qcom.fmradio.xml
+    FMRadio \
+    libfmjni
 
 # For android_filesystem_config.h
 PRODUCT_PACKAGES += \
@@ -200,7 +207,11 @@ PRODUCT_PACKAGES += \
 # Gatekeeper HAL
 PRODUCT_PACKAGES += \
     android.hardware.gatekeeper@1.0-impl \
-    android.hardware.gatekeeper@1.0-service
+
+# GNSS HAL
+PRODUCT_PACKAGES += \
+    android.hardware.gnss@1.1-impl-qti \
+    android.hardware.gnss@1.1-service-qti
 
 # GPS
 PRODUCT_PACKAGES += \
@@ -208,7 +219,13 @@ PRODUCT_PACKAGES += \
     gps.msm8952 \
     libcurl \
     libgnss \
-    libgnsspps
+    libgnsspps \
+    libgps.utils \
+    libloc_core \
+    libloc_ds_api \
+    libloc_stub \
+    liblocation_api \
+    libvehiclenetwork-native
 
 PRODUCT_PACKAGES += \
     flp.conf \
@@ -221,19 +238,19 @@ PRODUCT_PACKAGES += \
 # Health HAL
 PRODUCT_PACKAGES += \
     android.hardware.health@2.0-impl \
-    android.hardware.health@2.0-service \
-    android.hardware.health@2.0 \
+    android.hardware.health@2.0-service
+
+# Healthd
+PRODUCT_PACKAGES += \
     chargeonlymode
 
 # HIDL
 PRODUCT_PACKAGES += \
     android.hidl.base@1.0 \
-    android.hidl.manager@1.0 \
-    android.hidl.manager@1.0-java
+    android.hidl.manager@1.0
 
-# IMS
-PRODUCT_PACKAGES += \
-    ims-ext-common
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/manifest.xml:system/vendor/manifest.xml
 
 # IPA Manager
 PRODUCT_PACKAGES += \
@@ -257,11 +274,12 @@ PRODUCT_COPY_FILES += \
 # Keymaster HAL
 PRODUCT_PACKAGES += \
     android.hardware.keymaster@3.0-impl \
-    android.hardware.keymaster@3.0-service
 
 # Lights
 PRODUCT_PACKAGES += \
-    android.hardware.light@2.0-service.aw2013
+    android.hardware.light@2.0-service.aw2013 \
+    android.hardware.light@2.0-impl
+
 # Media
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/media_codecs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs.xml \
@@ -297,6 +315,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/privapp-permissions-qti.xml:system/etc/permissions/privapp-permissions-qti.xml
 
+# Power
+PRODUCT_PACKAGES += \
+    android.hardware.power@1.1-service-qti
+
 # QPerformance
 PRODUCT_BOOT_JARS += QPerformance
 
@@ -308,8 +330,7 @@ PRODUCT_PACKAGES += \
 # Ramdisk
 PRODUCT_PACKAGES += \
     fstab.qcom \
-    init.qcom.sh \
-    init.qcom.post_boot.sh
+    init.qcom.sh
 
 PRODUCT_PACKAGES += \
     init.qcom.rc \
@@ -321,6 +342,13 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.renderscript@1.0-impl
 
+# RIL
+PRODUCT_PACKAGES += \
+    telephony-ext
+
+PRODUCT_BOOT_JARS += \
+    telephony-ext
+
 # Seccomp policy
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/seccomp_policy/mediacodec.policy:$(TARGET_COPY_OUT_VENDOR)/etc/seccomp_policy/mediacodec.policy
@@ -328,11 +356,8 @@ PRODUCT_COPY_FILES += \
 # Sensors
 PRODUCT_PACKAGES += \
     android.hardware.sensors@1.0-impl \
-    android.hardware.sensors@1.0-service
-
-# Shim
-PRODUCT_PACKAGES += \
-    libshim_ims
+    android.hardware.sensors@1.0-service \
+    libsensorndkbridge
 
 # TextClassifier smart selection model files
 PRODUCT_PACKAGES += \
@@ -354,13 +379,22 @@ PRODUCT_PACKAGES += \
 
 # Thermal
 PRODUCT_PACKAGES += \
+    thermal.msm8952 \
     android.hardware.thermal@1.0-impl \
-    android.hardware.thermal@1.0-service \
-    thermal.msm8952
+    android.hardware.thermal@1.0-service
+
+# WCNSS
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/wifi/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
+    $(LOCAL_PATH)/wifi/WCNSS_qcom_cfg.ini:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/WCNSS_qcom_cfg.ini \
+    $(LOCAL_PATH)/wifi/WCNSS_wlan_dictionary.dat:system/etc/firmware/wlan/prima/WCNSS_wlan_dictionary.dat
 
 # USB HAL
 PRODUCT_PACKAGES += \
     android.hardware.usb@1.0-service.basic
+
+PRODUCT_COPY_FILES += \
+    prebuilts/vndk/v27/arm64/arch-arm64-armv8-a/shared/vndk-core/android.hardware.gnss@1.0.so:system/lib64/android.hardware.gnss@1.0-v27.so
 
 # Vibrator
 PRODUCT_PACKAGES += \
@@ -370,36 +404,13 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.drm@1.0-service.widevine
 
-# VR
+# WiFi HAL
 PRODUCT_PACKAGES += \
-    android.hardware.vr@1.0-impl:64 \
-    android.hardware.vr@1.0-service \
-    vr.msm8952
-
-PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.vr.high_performance.xml:system/etc/permissions/android.hardware.vr.high_performance.xml
-
-# Sound trigger
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/audio/sound_trigger_mixer_paths.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sound_trigger_mixer_paths.xml \
-    $(LOCAL_PATH)/audio/sound_trigger_mixer_paths_wcd9306.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sound_trigger_mixer_paths_wcd9306.xml \
-    $(LOCAL_PATH)/audio/sound_trigger_mixer_paths_wcd9330.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sound_trigger_mixer_paths_wcd9330.xml \
-    $(LOCAL_PATH)/audio/sound_trigger_mixer_paths_wcd9335.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sound_trigger_mixer_paths_wcd9335.xml \
-    $(LOCAL_PATH)/audio/sound_trigger_platform_info.xml:$(TARGET_COPY_OUT_VENDOR)/etc/sound_trigger_platform_info.xml
-
-# WCNSS
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/wifi/WCNSS_cfg.dat:system/etc/firmware/wlan/prima/WCNSS_cfg.dat \
-    $(LOCAL_PATH)/wifi/WCNSS_qcom_cfg.ini:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/WCNSS_qcom_cfg.ini \
-    $(LOCAL_PATH)/wifi/WCNSS_wlan_dictionary.dat:system/etc/firmware/wlan/prima/WCNSS_wlan_dictionary.dat
+    android.hardware.wifi@1.0-service
 
 # Whitelisted app
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/qti_whitelist.xml:system/etc/sysconfig/qti_whitelist.xml
-
-PRODUCT_COPY_FILES += \
-    prebuilts/vndk/v27/arm64/arch-arm64-armv8-a/shared/vndk-core/android.frameworks.sensorservice@1.0.so:system/lib64/android.frameworks.sensorservice@1.0-v27.so \
-    prebuilts/vndk/v27/arm64/arch-arm64-armv8-a/shared/vndk-core/android.hardware.gnss@1.0.so:system/lib64/android.hardware.gnss@1.0-v27.so
 
 # Wifi
 PRODUCT_PACKAGES += \
