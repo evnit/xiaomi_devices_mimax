@@ -16,4 +16,5 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/aosip.mk
+    $(LOCAL_DIR)/full_hydrogen.mk \
+    $(LOCAL_DIR)/bootleg_hydrogen.mk
