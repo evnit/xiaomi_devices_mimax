@@ -1,5 +1,4 @@
-
-/* 
+/*
 Copyright (c) 2013, The Linux Foundation. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -52,6 +51,9 @@ extern "C"
 #include <pthread.h>
 #include <sys/select.h>
 #include <sys/socket.h>
+#include <linux/socket.h>
+#include <inaddr.h>
+#define sockaddr_storage __kernel_sockaddr_storage
 #include <linux/if.h>
 #include <linux/if_addr.h>
 #include <linux/rtnetlink.h>
@@ -62,11 +64,11 @@ extern "C"
 #define MAX_NUM_OF_FD 10
 #define IPA_NL_MSG_MAX_LEN (2048)
 
-/*--------------------------------------------------------------------------- 
+/*---------------------------------------------------------------------------
 	 Type representing enumeration of NetLink event indication messages
 ---------------------------------------------------------------------------*/
 
-/*--------------------------------------------------------------------------- 
+/*---------------------------------------------------------------------------
 	 Types representing parsed NetLink message
 ---------------------------------------------------------------------------*/
 #define IPA_NLA_PARAM_NONE        (0x0000)
@@ -91,8 +93,8 @@ extern "C"
 #define IPA_RTA_PARAM_METRICS     (0x0100)
 
 
-/*--------------------------------------------------------------------------- 
-	 Type representing function callback registered with a socket listener 
+/*---------------------------------------------------------------------------
+	 Type representing function callback registered with a socket listener
 	 thread for reading from a socket on receipt of an incoming message
 ---------------------------------------------------------------------------*/
 typedef int (*ipa_sock_thrd_fd_read_f)(int fd);
@@ -127,7 +129,7 @@ typedef struct
 } ipa_nl_sk_info_t;
 
 typedef struct ipa_nl_addr_s {
-	struct __kernel_sockaddr_storage        ip_addr;
+	struct sockaddr_storage        ip_addr;
 	unsigned int                   mask;
 } ipa_nl_addr_t;
 
@@ -150,11 +152,11 @@ typedef struct ipa_nl_addr_info_s {
 	{
 		unsigned int                  param_mask;
 		unsigned char                 label_name[IF_NAME_LEN];
-		struct __kernel_sockaddr_storage       prefix_addr;
-		struct __kernel_sockaddr_storage       local_addr;
-		struct __kernel_sockaddr_storage       bcast_addr;
-		struct __kernel_sockaddr_storage       acast_addr;
-		struct __kernel_sockaddr_storage       mcast_addr;
+		struct sockaddr_storage       prefix_addr;
+		struct sockaddr_storage       local_addr;
+		struct sockaddr_storage       bcast_addr;
+		struct sockaddr_storage       acast_addr;
+		struct sockaddr_storage       mcast_addr;
 	} attr_info;
 } ipa_nl_addr_info_t;
 
@@ -164,7 +166,7 @@ typedef struct ipa_nl_neigh_info_s {
 	struct                                  /* attributes  */
 	{
 		unsigned int                param_mask;
-		struct __kernel_sockaddr_storage     local_addr;
+		struct sockaddr_storage     local_addr;
 		struct  sockaddr            lladdr_hwaddr;
 	} attr_info;
 } ipa_nl_neigh_info_t;
@@ -176,10 +178,10 @@ typedef struct ipa_nl_route_info_s {
 	struct                                      /* attributes  */
 	{
 		unsigned int                  param_mask;
-		struct __kernel_sockaddr_storage       dst_addr;
-		struct __kernel_sockaddr_storage       src_addr;
-		struct __kernel_sockaddr_storage       gateway_addr;
-		struct __kernel_sockaddr_storage       mark_addr;
+		struct sockaddr_storage       dst_addr;
+		struct sockaddr_storage       src_addr;
+		struct sockaddr_storage       gateway_addr;
+		struct sockaddr_storage       mark_addr;
 		struct rta_cacheinfo          cache_info;
 		__u32		iif_index;                      /* Link index  */
 		__u32		oif_index;                      /* Link index  */

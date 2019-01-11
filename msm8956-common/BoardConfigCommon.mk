@@ -1,6 +1,6 @@
 #
-# Copyright (C) 2015-2016 The CyanogenMod Project
-#           (C) 2017-2018 The LineageOS Project
+# Copyright (C) 2016 The CyanogenMod Project
+# Copyright (C) 2017 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,9 +40,6 @@ TARGET_BOARD_PLATFORM_GPU := qcom-adreno510
 TARGET_USES_64_BIT_BINDER := true
 ENABLE_CPUSETS := true
 
-# Shipping API
-PRODUCT_SHIPPING_API_LEVEL := 23
-
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := msm8952
 TARGET_NO_BOOTLOADER := true
@@ -58,6 +55,11 @@ TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_HEADER_ARCH := arm64
 TARGET_KERNEL_SOURCE := kernel/xiaomi/msm8956
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
+
+# Hal's
+TARGET_QCOM_AUDIO_VARIANT := caf-msm8952
+TARGET_QCOM_DISPLAY_VARIANT := caf-msm8952
+TARGET_QCOM_MEDIA_VARIANT := caf-msm8952
 
 # ANT+
 BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
@@ -89,7 +91,8 @@ AUDIO_FEATURE_ENABLED_VORBIS_OFFLOAD := true
 AUDIO_FEATURE_ENABLED_WMA_OFFLOAD := true
 AUDIO_USE_LL_AS_PRIMARY_OUTPUT := true
 BOARD_USES_ALSA_AUDIO := true
-USE_CUSTOM_AUDIO_POLICY := 0
+BOARD_SUPPORTS_SOUND_TRIGGER := true
+USE_CUSTOM_AUDIO_POLICY := 1
 USE_XML_AUDIO_POLICY_CONF := 1
 
 # Bluetooth
@@ -104,11 +107,11 @@ BOARD_QTI_CAMERA_32BIT_ONLY := true
 USE_DEVICE_SPECIFIC_CAMERA := true
 TARGET_TS_MAKEUP := true
 TARGET_PROCESS_SDK_VERSION_OVERRIDE := \
-    /system/bin/mm-qcamera-daemon=23
+        /system/bin/mm-qcamera-daemon=23
 
 # Charger
 BOARD_CHARGER_ENABLE_SUSPEND := true
-WITH_CM_CHARGER := false
+WITH_CUSTOM_CHARGER := false
 
 # CNE
 BOARD_USES_QCNE := true
@@ -118,30 +121,24 @@ ifeq ($(HOST_OS),linux)
   ifneq ($(TARGET_BUILD_VARIANT),eng)
     ifeq ($(WITH_DEXPREOPT),)
       WITH_DEXPREOPT := true
+      WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
+      DONT_DEXPREOPT_PREBUILTS := true 
     endif
   endif
 endif
-WITH_DEXPREOPT_BOOT_IMG_ONLY ?= true
 
 # Display
-MAX_VIRTUAL_DISPLAY_DIMENSION := 2048
+BOARD_USES_ADRENO := true
+TARGET_ADDITIONAL_GRALLOC_10_USAGE_BITS := 0x02000000U
 TARGET_CONTINUOUS_SPLASH_ENABLED := true
 TARGET_FORCE_HWC_FOR_VIRTUAL_DISPLAYS := true
-TARGET_USES_HWC2 := true
 TARGET_USES_C2D_COMPOSITION := true
 TARGET_USES_ION := true
-TARGET_USES_OVERLAY := true
-TARGET_USES_NEW_ION_API := true
-
 MAX_EGL_CACHE_KEY_SIZE := 12*1024
 MAX_EGL_CACHE_SIZE := 2048*1024
+MAX_VIRTUAL_DISPLAY_DIMENSION := 2048
 
-NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
-SF_VSYNC_EVENT_PHASE_OFFSET_NS := 2000000
-VSYNC_EVENT_PHASE_OFFSET_NS := 6000000
-
-# UI
-TARGET_ADDITIONAL_GRALLOC_10_USAGE_BITS := 0x02000000U
+OVERRIDE_RS_DRIVER:= libRSDriver_adreno.so
 
 # Encryption
 TARGET_HW_DISK_ENCRYPTION := true
@@ -168,10 +165,9 @@ BOARD_HAVE_QCOM_FM := true
 TARGET_QCOM_NO_FM_FIRMWARE := true
 
 # GPS
-TARGET_NO_RPC := true
 USE_DEVICE_SPECIFIC_GPS := true
 USE_DEVICE_SPECIFIC_LOC_API := true
-BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := $(TARGET_BOARD_PLATFORM)
+TARGET_NO_RPC := true
 
 # Init
 TARGET_INIT_VENDOR_LIB := libinit_msm
@@ -185,9 +181,6 @@ TARGET_PROVIDES_KEYMASTER := true
 BOARD_LIGHTS_VARIANT := aw2013
 TARGET_PROVIDES_LIBLIGHT := true
 
-# Lineage Hardware
-JAVA_SOURCE_OVERLAYS := org.pixelexperience.keydisabler|$(VENDOR_PATH)/keydisabler|**/*.java
-
 # Media
 TARGET_USES_MEDIA_EXTENSIONS := true
 
@@ -196,7 +189,6 @@ TARGET_PER_MGR_ENABLED := true
 
 # Power
 TARGET_HAS_NO_WLAN_STATS := true
-TARGET_RPM_SYSTEM_STAT := /d/rpm_stats
 
 # Properties
 TARGET_SYSTEM_PROP += $(VENDOR_PATH)/system.prop
@@ -210,28 +202,26 @@ TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USES_MKE2FS := true
 TARGET_USERIMAGES_USE_F2FS := true
 
-# Render
-OVERRIDE_RS_DRIVER:= libRSDriver_adreno.so
-USE_OPENGL_RENDERER := true
-
-# RIL
-TARGET_PROVIDES_QTI_TELEPHONY_JAR := true
-PROTOBUF_SUPPORTED := true
-TARGET_RIL_VARIANT := caf
-
 # Tap-to-Wake
 TARGET_TAP_TO_WAKE_NODE := "/proc/touchpanel/double_tap_enable"
 
-# Sensors
-USE_SENSOR_MULTI_HAL := true
+# Shims
+TARGET_LD_SHIM_LIBS := \
+    /system/lib64/lib-imsvideocodec.so|libshim_ims.so
 
 # SELinux
 #include device/qcom/sepolicy/sepolicy.mk
+#include device/qcom/sepolicy/legacy-sepolicy.mk
 #BOARD_SEPOLICY_DIRS += $(VENDOR_PATH)/sepolicy
+
+# Thermal
+USE_DEVICE_SPECIFIC_THERMAL := true
+
+# Vr
+USE_DEVICE_SPECIFIC_VR := true
 
 # Wifi
 WPA_SUPPLICANT_VERSION      := VER_0_8_X
-# BOARD_USES_AOSP_WLAN_HAL    := true
 BOARD_HAS_QCOM_WLAN         := true
 BOARD_HAS_QCOM_WLAN_SDK     := true
 BOARD_WLAN_DEVICE           := qcwcn

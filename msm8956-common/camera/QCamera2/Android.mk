@@ -11,7 +11,6 @@ LOCAL_SRC_FILES := \
         util/QCameraCmdThread.cpp \
         util/QCameraQueue.cpp \
         util/QCameraBufferMaps.cpp \
-        util/QCameraFlash.cpp \
         QCamera2Hal.cpp \
         QCamera2Factory.cpp
 
@@ -53,14 +52,12 @@ LOCAL_C_INCLUDES := \
         $(LOCAL_PATH)/stack/common \
         frameworks/native/include/media/hardware \
         frameworks/native/include/media/openmax \
-        frameworks/native/libs/nativewindow/include \
-        hardware/qcom/media-caf/msm8952/libstagefrighthw \
+        hardware/qcom/media-caf-msm8952/libstagefrighthw \
         system/media/camera/include \
         $(LOCAL_PATH)/../mm-image-codec/qexif \
         $(LOCAL_PATH)/../mm-image-codec/qomx_core \
         $(LOCAL_PATH)/util \
-        hardware/qcom/media-caf/msm8952/mm-core/inc \
-        $(LOCAL_PATH)/HAL3
+        hardware/qcom/media-caf-msm8952/mm-core/inc \
 
 #HAL 1.0 Include paths
 LOCAL_C_INCLUDES += \
@@ -74,26 +71,6 @@ ifeq ($(TARGET_TS_MAKEUP),true)
 LOCAL_CFLAGS += -DTARGET_TS_MAKEUP
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/HAL/tsMakeuplib/include
 endif
-
-ifeq ($(TARGET_FLASHLIGHT_CONTROL),true)
-LOCAL_CFLAGS += -DFLASHLIGHT_CONTROL
-ifdef TARGET_FLASHLIGHT_CONTROL_ID
-LOCAL_CFLAGS += -DFLASHLIGHT_CONTROL_ID=$(TARGET_FLASHLIGHT_CONTROL_ID)
-endif
-ifdef TARGET_FLASHLIGHT_CONTROL_PATH
-LOCAL_CFLAGS += -DFLASHLIGHT_CONTROL_PATH=\"$(TARGET_FLASHLIGHT_CONTROL_PATH)\"
-endif
-ifdef TARGET_FLASHLIGHT_CURRENT_VALUE0
-LOCAL_CFLAGS += -DFLASHLIGHT_CURRENT_VALUE0=$(TARGET_FLASHLIGHT_CURRENT_VALUE0)
-endif
-ifdef TARGET_FLASHLIGHT_CURRENT_VALUE1
-LOCAL_CFLAGS += -DFLASHLIGHT_CURRENT_VALUE1=$(TARGET_FLASHLIGHT_CURRENT_VALUE1)
-endif
-ifdef TARGET_FLASHLIGHT_CURRENT_VALUE2
-LOCAL_CFLAGS += -DFLASHLIGHT_CURRENT_VALUE2=$(TARGET_FLASHLIGHT_CURRENT_VALUE2)
-endif
-endif
-
 ifneq (,$(filter msm8974 msm8916 msm8226 msm8610 msm8916 apq8084 msm8084 msm8994 msm8992 msm8952 msm8996,$(TARGET_BOARD_PLATFORM)))
     LOCAL_CFLAGS += -DVENUS_PRESENT
 endif
@@ -114,10 +91,10 @@ endif
 LOCAL_C_INCLUDES += \
         $(TARGET_OUT_HEADERS)/qcom/display
 LOCAL_C_INCLUDES += \
-        hardware/qcom/display-caf/msm8952/libqservice
+        hardware/qcom/display-caf-msm8952/libqservice
 LOCAL_SHARED_LIBRARIES := libcamera_client liblog libhardware libutils libcutils libdl
 LOCAL_SHARED_LIBRARIES += libmmcamera_interface libmmjpeg_interface libui libcamera_metadata
-LOCAL_SHARED_LIBRARIES += libqdMetaData libqservice libbinder libgui libnativewindow
+LOCAL_SHARED_LIBRARIES += libqdMetaData libqservice libbinder libgui
 ifeq ($(TARGET_TS_MAKEUP),true)
 LOCAL_SHARED_LIBRARIES += libts_face_beautify_hal libts_detected_face_hal
 endif

@@ -34,6 +34,7 @@ on fs
     wait /dev/block/platform/soc.0/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc.0/${ro.boot.bootdevice} /dev/block/bootdevice
     mount_all /vendor/etc/fstab.qcom
+    swapon_all /vendor/etc/fstab.qcom
 
 on init
     write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
@@ -83,8 +84,6 @@ service qseecomd /system/vendor/bin/qseecomd
 service perfd /system/vendor/bin/perfd
    class main
    user root
-   group root readproc
-   socket perfd seqpacket 0666 root system
    writepid /dev/cpuset/system-background/tasks
 
 service thermal-engine /system/vendor/bin/thermal-engine
@@ -99,9 +98,6 @@ service thermal-engine /system/vendor/bin/thermal-engine
 on boot
     start rmt_storage
     write /proc/sys/kernel/sched_boost 1
-
-    # set vibrator intensity to 50%
-    write /sys/class/timed_output/vibrator/vtg_level 1777
 
 service wcnss-service /system/bin/wcnss_service
     class main
@@ -142,7 +138,6 @@ on property:vendor.ims.DATA_DAEMON_STATUS=1
     start vendor.imsrcsservice
 
 on charger
-    load_system_props
     setprop persist.sys.usb.config mass_storage
     start qcom-post-boot
     setprop persist.sys.usb.config mass_storage

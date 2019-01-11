@@ -110,21 +110,31 @@ public class DozeSettingsFragment extends PreferenceFragment implements OnPrefer
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        Utils.enableGesture(getActivity(), preference.getKey(), (Boolean) newValue);
+        final String key = preference.getKey();
+        final boolean value = (Boolean) newValue;
+        if (Utils.GESTURE_PICK_UP_KEY.equals(key)) {
+            mPickUpPreference.setChecked(value);
+        } else if (Utils.GESTURE_HAND_WAVE_KEY.equals(key)) {
+            mHandwavePreference.setChecked(value);
+        } else if (Utils.GESTURE_POCKET_KEY.equals(key)) {
+            mPocketPreference.setChecked(value);
+        } else {
+            return false;
+        }
         Utils.checkDozeService(getActivity());
         return true;
     }
 
     @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-        Utils.enableDoze(getActivity(), isChecked);
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        Utils.enableDoze(b, getActivity());
         Utils.checkDozeService(getActivity());
 
-        mTextView.setText(getString(isChecked ? R.string.switch_bar_on : R.string.switch_bar_off));
+        mTextView.setText(getString(b ? R.string.switch_bar_on : R.string.switch_bar_off));
 
-        mPickUpPreference.setEnabled(isChecked);
-        mHandwavePreference.setEnabled(isChecked);
-        mPocketPreference.setEnabled(isChecked);
+        mPickUpPreference.setEnabled(b);
+        mHandwavePreference.setEnabled(b);
+        mPocketPreference.setEnabled(b);
     }
 
     @Override
@@ -136,7 +146,7 @@ public class DozeSettingsFragment extends PreferenceFragment implements OnPrefer
         return false;
     }
 
-    private static class HelpDialogFragment extends DialogFragment {
+    public static class HelpDialogFragment extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             return new AlertDialog.Builder(getActivity())
