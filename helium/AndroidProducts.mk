@@ -14,5 +14,4 @@
 # limitations under the License.
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/full_helium.mk \
-    $(LOCAL_DIR)/nitrogen_helium.mk
+    $(LOCAL_DIR)/liquid.mk
