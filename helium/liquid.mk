@@ -1,6 +1,6 @@
 #
-# Copyright 2016 The CyanogenMod Project
-# Copyright 2017 The LineageOS Project
+# Copyright (C) 2015-2016 The CyanogenMod Project
+#           (C) 2017-2018 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,23 +15,26 @@
 # limitations under the License.
 #
 
-$(call inherit-product, device/xiaomi/helium/full_helium.mk)
+TARGET_BOOT_ANIMATION_RES := 1080
 
-# Inherit some common NitrogenOS stuff.
-$(call inherit-product, vendor/nitrogen/products/common.mk)
+# Inherit from those products. Most specific first.
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
+
+# Inherit from helium device
+$(call inherit-product, device/xiaomi/helium/device.mk)
+
+# Inherit some common LiquidRemix stuff.
+$(call inherit-product, vendor/liquid/config/common_full_phone.mk)
 
 # Set those variables here to overwrite the inherited values.
 BOARD_VENDOR := Xiaomi
 PRODUCT_BRAND := Xiaomi
 PRODUCT_DEVICE := helium
-PRODUCT_NAME := nitrogen_helium
+PRODUCT_NAME := liquid_helium
 PRODUCT_MANUFACTURER := Xiaomi
 PRODUCT_MODEL := Mi Max
 TARGET_VENDOR := Xiaomi
-
-# Boot animation
-TARGET_SCREEN_HEIGHT := 1920
-TARGET_SCREEN_WIDTH := 1080
 
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 
