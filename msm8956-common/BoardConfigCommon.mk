@@ -205,6 +205,12 @@ TARGET_USERIMAGES_USE_F2FS := true
 # Tap-to-Wake
 TARGET_TAP_TO_WAKE_NODE := "/proc/touchpanel/double_tap_enable"
 
+# RIL
+TARGET_PROVIDES_QTI_TELEPHONY_JAR := true
+PROTOBUF_SUPPORTED := true
+TARGET_RIL_VARIANT := caf
+USE_DEVICE_SPECIFIC_DATA_IPA_CFG_MGR := true
+
 # Shims
 TARGET_LD_SHIM_LIBS := \
     /system/lib64/lib-imsvideocodec.so|libshim_ims.so
