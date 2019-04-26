@@ -15,18 +15,24 @@
 # limitations under the License.
 #
 
+TARGET_G_ARCH := arm64
+
+# Inherit from MIUI camera
+# $(call inherit-product, $(LOCAL_PATH)/MiuiCamera/config.mk)
+
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
-
 # Get non-open-source specific aspects
 $(call inherit-product-if-exists, vendor/xiaomi/msm8956-common/msm8956-common-vendor.mk)
+$(call inherit-product-if-exists, vendor/xiaomi/wfd/wfd-common-vendor.mk)
 
 # Screen density
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
-$(call inherit-product, vendor/nitrogen/config/phone-xxhdpi-2048-hwui-memory.mk)
+# Boot animation
+TARGET_BOOT_ANIMATION_RES := 1080
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -76,12 +82,20 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     external/ant-wireless/antradio-library/com.dsi.ant.antradio_library.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/com.dsi.ant.antradio_library.xml
 
+# Device-specific Settings
+PRODUCT_PACKAGES += \
+    XiaomiParts
+
 # Audio
 PRODUCT_PACKAGES += \
+    android.hardware.audio@4.0 \
     android.hardware.audio@4.0-impl \
+    android.hardware.audio.common@4.0 \
+    android.hardware.audio.common@4.0-util \
     android.hardware.audio@2.0-service \
     android.hardware.audio.effect@4.0-impl \
     android.hardware.audio.effect@2.0-service \
+    android.hardware.broadcastradio@1.0-impl \
     android.hardware.soundtrigger@2.1-impl \
     android.hardware.soundtrigger@2.1-service \
     audio.a2dp.default \
@@ -98,6 +112,7 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/aanc_tuning_mixer.txt:$(TARGET_COPY_OUT_VENDOR)/etc/aanc_tuning_mixer.txt \
+    $(LOCAL_PATH)/audio/aanc_tuning_mixer_wcd9330.txt:$(TARGET_COPY_OUT_VENDOR)/etc/aanc_tuning_mixer_wcd9330.txt \
     $(LOCAL_PATH)/audio/aanc_tuning_mixer_wcd9335.txt:$(TARGET_COPY_OUT_VENDOR)/etc/aanc_tuning_mixer_wcd9335.txt \
     $(LOCAL_PATH)/audio/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
     $(LOCAL_PATH)/audio/audio_output_policy.conf:$(TARGET_COPY_OUT_VENDOR)/etc/audio_output_policy.conf \
@@ -114,7 +129,7 @@ PRODUCT_COPY_FILES += \
 
 # Bluetooth
 PRODUCT_PACKAGES += \
-    android.hardware.bluetooth@1.0-service 
+    android.hardware.bluetooth@1.0-service
 
 # Camera
 PRODUCT_PACKAGES += \
@@ -124,11 +139,14 @@ PRODUCT_PACKAGES += \
     camera.device@3.2-impl \
     camera.msm8952 \
     libqomx_core \
+    Snap \
     SnapdragonCamera \
+    SnapdragonCamera2 \
     vendor.qti.hardware.camera.device@1.0 \
     vendor.qti.hardware.camera.device@1.0_vendor
 
-PRODUCT_COPY_FILES +=  \
+# Camera
+PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml
 
 # Connectivity Engine support (CNE)
@@ -164,18 +182,15 @@ PRODUCT_PACKAGES += \
     vendor.display.config@1.0 \
     vendor.display.config@1.0_vendor
 
+PRODUCT_PACKAGES += \
+    vendor.display.color@1.0-service \
+    vendor.display.color@1.0-impl
+
 # DRM
 PRODUCT_PACKAGES += \
     android.hardware.drm@1.0-impl \
-    android.hardware.drm@1.0-service
-
-# Doze mode
-PRODUCT_PACKAGES += \
-    XiaomiDoze
-
-# Device features
-PRODUCT_PACKAGES += \
-    XiaomiParts
+    android.hardware.drm@1.0-service \
+    android.hardware.drm@1.1-service.clearkey
 
 # Face detection extension
 PRODUCT_PACKAGES += \
@@ -187,10 +202,8 @@ PRODUCT_PACKAGES += \
 
 # FM
 PRODUCT_PACKAGES += \
-    FM2 \
-    libqcomfm_jni \
-    qcom.fmradio \
-    qcom.fmradio.xml
+    FMRadio \
+    libfmjni
 
 # For android_filesystem_config.h
 PRODUCT_PACKAGES += \
@@ -204,6 +217,7 @@ PRODUCT_PACKAGES += \
 # GPS
 PRODUCT_PACKAGES += \
     android.hardware.gnss@1.0-impl-qti \
+    android.hardware.gnss@1.0-service-qti \
     gps.msm8952 \
     libcurl \
     libgnss \
@@ -221,7 +235,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.health@2.0-impl \
     android.hardware.health@2.0-service \
-    android.hardware.health@2.0 \
+    android.hardware.health@2.0
+
+# Healthd
+PRODUCT_PACKAGES += \
     chargeonlymode
 
 # HIDL
@@ -261,6 +278,7 @@ PRODUCT_PACKAGES += \
 # Lights
 PRODUCT_PACKAGES += \
     android.hardware.light@2.0-service.aw2013
+
 # Media
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/media_codecs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs.xml \
@@ -292,23 +310,53 @@ PRODUCT_PACKAGES += \
     libOmxVenc \
     libstagefrighthw
 
+# Perf
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/perf/commonresourceconfigs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/perf/commonresourceconfigs.xml \
+    $(LOCAL_PATH)/perf/perfboostsconfig.xml:$(TARGET_COPY_OUT_VENDOR)/etc/perf/perfboostsconfig.xml \
+    $(LOCAL_PATH)/perf/targetconfig.xml:$(TARGET_COPY_OUT_VENDOR)/etc/perf/targetconfig.xml \
+    $(LOCAL_PATH)/perf/targetresourceconfigs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/perf/targetresourceconfigs.xml \
+    $(LOCAL_PATH)/perf/whitelistedapps.xml:system/etc/perf/whitelistedapps.xml \
+    $(LOCAL_PATH)/perf/perf-profile0.conf:$(TARGET_COPY_OUT_VENDOR)/etc/perf/perf-profile0.conf \
+    $(LOCAL_PATH)/perf/perf-profile1.conf:$(TARGET_COPY_OUT_VENDOR)/etc/perf/perf-profile1.conf \
+    $(LOCAL_PATH)/perf/perf-profile2.conf:$(TARGET_COPY_OUT_VENDOR)/etc/perf/perf-profile2.conf \
+    $(LOCAL_PATH)/perf/perf-profile3.conf:$(TARGET_COPY_OUT_VENDOR)/etc/perf/perf-profile3.conf \
+    $(LOCAL_PATH)/perf/perf-profile4.conf:$(TARGET_COPY_OUT_VENDOR)/etc/perf/perf-profile4.conf \
+    $(LOCAL_PATH)/perf/perf-profile5.conf:$(TARGET_COPY_OUT_VENDOR)/etc/perf/perf-profile5.conf \
+    $(LOCAL_PATH)/perf/perf-profile6.conf:$(TARGET_COPY_OUT_VENDOR)/etc/perf/perf-profile6.conf \
+    $(LOCAL_PATH)/perf/public.libraries.txt:$(TARGET_COPY_OUT_VENDOR)/etc/public.libraries.txt
+
 # Privapp Whitelist
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/privapp-permissions-qti.xml:system/etc/permissions/privapp-permissions-qti.xml
 
-# QPerformance
-PRODUCT_BOOT_JARS += QPerformance
+# Power
+PRODUCT_PACKAGES += \
+    android.hardware.power@1.1-service-qti
 
 # Qualcomm dependencies
 PRODUCT_PACKAGES += \
     libtinyxml \
     libxml2
 
+# QTI performance
+PRODUCT_BOOT_JARS += \
+    QPerformance \
+    UxPerformance
+
+# Enable UxExperience IOPrefetcher
+PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
+    vendor.enable_prefetch=1 \
+    vendor.iop.enable_uxe=1 \
+    vendor.iop.enable_prefetch_ofr=1 \
+    vendor.perf.iop_v3.enable=1 \
+    ro.vendor.at_library=libqti-at.so \
+    persist.vendor.qti.games.gt.prof=1
+
 # Ramdisk
 PRODUCT_PACKAGES += \
     fstab.qcom \
-    init.qcom.sh \
-    init.qcom.post_boot.sh
+    init.qcom.sh
 
 PRODUCT_PACKAGES += \
     init.qcom.rc \
@@ -319,6 +367,13 @@ PRODUCT_PACKAGES += \
 # RenderScript HAL
 PRODUCT_PACKAGES += \
     android.hardware.renderscript@1.0-impl
+
+# RIL
+PRODUCT_PACKAGES += \
+    telephony-ext
+
+PRODUCT_BOOT_JARS += \
+    telephony-ext
 
 # Seccomp policy
 PRODUCT_COPY_FILES += \
@@ -333,6 +388,10 @@ PRODUCT_PACKAGES += \
 # Shim
 PRODUCT_PACKAGES += \
     libshim_ims
+
+# Strip debug
+PRODUCT_MINIMIZE_JAVA_DEBUG_INFO := true
+PRODUCT_ART_TARGET_INCLUDE_DEBUG_BUILD := false
 
 # TextClassifier smart selection model files
 PRODUCT_PACKAGES += \
@@ -364,7 +423,8 @@ PRODUCT_PACKAGES += \
 
 # Vibrator
 PRODUCT_PACKAGES += \
-    android.hardware.vibrator@1.0-impl
+    android.hardware.vibrator@1.0-impl \
+    android.hardware.vibrator@1.0-service
 
 # Widevine
 PRODUCT_PACKAGES += \
@@ -410,9 +470,35 @@ PRODUCT_PACKAGES += \
     libwpa_client \
     hostapd \
     wificond \
+    wifilogd \
+    dhcpcd.conf \
     wpa_supplicant \
     wpa_supplicant.conf
 
 PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/wifi/hostapd.accept:$(TARGET_COPY_OUT_VENDOR)/etc/hostapd/hostapd.accept \
+    $(LOCAL_PATH)/wifi/hostapd.deny:$(TARGET_COPY_OUT_VENDOR)/etc/hostapd/hostapd.deny \
+    $(LOCAL_PATH)/wifi/hostapd_default.conf:$(TARGET_COPY_OUT_VENDOR)/etc/hostapd/hostapd_default.conf \
     $(LOCAL_PATH)/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
     $(LOCAL_PATH)/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
+
+# GApps
+TARGET_GAPPS_ARCH := arm64
+
+# VNDK
+PRODUCT_PACKAGES += \
+    vndk-sp
+
+# WiFi Display	
+PRODUCT_PACKAGES += \
+    libnl \
+    libbson
+
+PRODUCT_BOOT_JARS += \
+    WfdCommon
+
+#Enable WIFI AWARE FEATURE
+WIFI_HIDL_FEATURE_AWARE := true
+
+# GApps
+# $(call inherit-product-if-exists, vendor/gapps/config.mk)

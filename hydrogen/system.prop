@@ -9,6 +9,11 @@ persist.vendor.audio.fluence.voicerec=false
 vendor.voice.voip.conc.disabled=true
 audio.offload.multiaac.enable=true
 
+# Display
+ro.qcom.ad=1
+ro.qcom.ad.calib.data=/system/etc/calib.cfg
+ro.qcom.ad.sensortype=2
+ro.qualcomm.cabl=0
 
 # Radio
 persist.radio.cs_srv_type=1
@@ -43,12 +48,6 @@ persist.data.df.dev_name=rmnet_usb0
 
 # Property to enable VDS WFD solution
 persist.hwc.enable_vds=1
-
-# Display
-ro.qcom.ad=1
-ro.qcom.ad.calib.data=/system/etc/calib.cfg
-ro.qcom.ad.sensortype=2
-ro.qualcomm.cabl=0
 
 # Display feature support
 # bit0-ColorPrefer bit1-EyeCare bit2-AD bit3-CE bit4-CABC bit5-SRGB

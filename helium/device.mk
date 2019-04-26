@@ -18,7 +18,7 @@
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
 # call the proprietary setup
-$(call inherit-product-if-exists, vendor/xiaomi/hydrogen/hydrogen-vendor.mk)
+$(call inherit-product-if-exists, vendor/xiaomi/helium/helium-vendor.mk)
 
 # Audio
 PRODUCT_COPY_FILES += \
@@ -43,12 +43,8 @@ PRODUCT_COPY_FILES += \
 
 # Ramdisk
 PRODUCT_PACKAGES += \
-    init.helium.rc
-
-# Sensors
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/sensors/hals.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/hals.conf \
-    $(LOCAL_PATH)/configs/sensors/sensor_def_qcomdev.conf:$(TARGET_COPY_OUT_VENDOR)/etc/sensors/sensor_def_qcomdev.conf
+    init.helium.rc \
+    init.qcom.post_boot.sh
 
 # Wifi
 PRODUCT_COPY_FILES += \

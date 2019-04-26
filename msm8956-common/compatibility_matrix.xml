@@ -32,6 +32,14 @@
         </interface>
     </hal>
     <hal format="hidl" optional="false">
+         <name>android.hardware.health</name>
+         <version>2.0</version>
+         <interface>
+             <name>IHealth</name>
+             <instance>backup</instance>
+         </interface>
+     </hal>
+    <hal format="hidl" optional="false">
         <name>android.hidl.allocator</name>
         <version>1.0</version>
         <interface>
@@ -41,7 +49,7 @@
     </hal>
     <hal format="hidl" optional="false">
         <name>android.hidl.manager</name>
-        <version>1.0</version>
+        <version>1.1</version>
         <interface>
             <name>IServiceManager</name>
             <instance>default</instance>
@@ -69,6 +77,18 @@
         <interface>
             <name>IKeystore</name>
             <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl" optional="true">
+        <name>com.qualcomm.qti.wifidisplayhal</name>
+        <version>1.0</version>
+        <interface>
+            <name>IHDCPSession</name>
+            <instance>wifidisplayhdcphal</instance>
+        </interface>
+        <interface>
+            <name>IDSManager</name>
+            <instance>wifidisplaydshal</instance>
         </interface>
     </hal>
 </compatibility-matrix>
