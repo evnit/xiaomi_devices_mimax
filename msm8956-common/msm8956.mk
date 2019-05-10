@@ -15,17 +15,20 @@
 # limitations under the License.
 #
 
-TARGET_G_ARCH := arm64
+# Recorder
+PRODUCT_PACKAGES += \
+    Recorder \
+    SoundRecorder
 
 # Inherit from MIUI camera
 # $(call inherit-product, $(LOCAL_PATH)/MiuiCamera/config.mk)
 
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
+DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay-lineage
 
 # Get non-open-source specific aspects
 $(call inherit-product-if-exists, vendor/xiaomi/msm8956-common/msm8956-common-vendor.mk)
-$(call inherit-product-if-exists, vendor/xiaomi/wfd/wfd-common-vendor.mk)
 
 # Screen density
 PRODUCT_AAPT_CONFIG := normal
@@ -33,6 +36,8 @@ PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
 # Boot animation
 TARGET_BOOT_ANIMATION_RES := 1080
+TARGET_SCREEN_WIDTH := 1080
+TARGET_SCREEN_HEIGHT := 1920
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -476,9 +481,6 @@ PRODUCT_PACKAGES += \
     wpa_supplicant.conf
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/wifi/hostapd.accept:$(TARGET_COPY_OUT_VENDOR)/etc/hostapd/hostapd.accept \
-    $(LOCAL_PATH)/wifi/hostapd.deny:$(TARGET_COPY_OUT_VENDOR)/etc/hostapd/hostapd.deny \
-    $(LOCAL_PATH)/wifi/hostapd_default.conf:$(TARGET_COPY_OUT_VENDOR)/etc/hostapd/hostapd_default.conf \
     $(LOCAL_PATH)/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
     $(LOCAL_PATH)/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
 
@@ -496,9 +498,6 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_BOOT_JARS += \
     WfdCommon
-
-#Enable WIFI AWARE FEATURE
-WIFI_HIDL_FEATURE_AWARE := true
 
 # GApps
 # $(call inherit-product-if-exists, vendor/gapps/config.mk)

@@ -16,4 +16,4 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/aosp_helium.mk
+    $(LOCAL_DIR)/bliss_helium.mk

@@ -40,4 +40,3 @@ public class DiracTileService extends TileService {
         super.onClick();
     }
 }
-

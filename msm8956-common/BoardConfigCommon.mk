@@ -163,6 +163,9 @@ TARGET_FS_CONFIG_GEN := $(VENDOR_PATH)/config.fs
 DEVICE_MANIFEST_FILE := $(VENDOR_PATH)/manifest.xml
 DEVICE_MATRIX_FILE   := $(VENDOR_PATH)/compatibility_matrix.xml
 
+# Lineage Hardware
+JAVA_SOURCE_OVERLAYS := org.lineageos.hardware|$(VENDOR_PATH)/lineagehw|**/*.java
+
 # exFat
 TARGET_EXFAT_DRIVER := exfat
 
@@ -219,7 +222,6 @@ PROTOBUF_SUPPORTED := true
 TARGET_RIL_VARIANT := caf
 USE_DEVICE_SPECIFIC_DATA_IPA_CFG_MGR := true
 TARGET_USES_OLD_MNC_FORMAT := true
-TARGET_USES_ALTERNATIVE_MANUAL_NETWORK_SELECT := true
 
 # Shims
 TARGET_LD_SHIM_LIBS := \
@@ -229,6 +231,7 @@ TARGET_LD_SHIM_LIBS := \
 #include device/qcom/sepolicy/sepolicy.mk
 #include device/qcom/sepolicy/legacy-sepolicy.mk
 #BOARD_SEPOLICY_DIRS += $(VENDOR_PATH)/sepolicy
+SELINUX_IGNORE_NEVERALLOWS := true
 
 # Thermal
 USE_DEVICE_SPECIFIC_THERMAL := true

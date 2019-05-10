@@ -161,6 +161,9 @@ etc/permissions/qcrilhook.xml
 etc/init/perfservice.rc
 etc/init/wfdservice.rc
 etc/init/dpmd.rc
+etc/hostapd/hostapd_default.conf
+etc/hostapd/hostapd.deny
+etc/hostapd/hostapd.accept
 etc/wfdconfigsink.xml
 etc/dpm/dpm.conf
 etc/wfdconfig.xml

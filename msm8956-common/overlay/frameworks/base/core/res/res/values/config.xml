@@ -380,6 +380,7 @@
 
     <!-- Boolean indicating whether we want button brightness support --> 
     <bool name="config_button_brightness_support">true</bool>
+    <integer name="config_button_brightness_default">128</integer> 
 
     <!-- Whether device supports double tap to wake -->
     <bool name="config_supportDoubleTapWake">true</bool>
