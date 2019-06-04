@@ -496,8 +496,8 @@ PRODUCT_PACKAGES += \
     libnl \
     libbson
 
-PRODUCT_BOOT_JARS += \
-    WfdCommon
+#PRODUCT_BOOT_JARS += \
+#    WfdCommon
 
 # GApps
 # $(call inherit-product-if-exists, vendor/gapps/config.mk)
