@@ -350,12 +350,21 @@
         </interface>
     </hal>
     <hal format="hidl">
+        <name>vendor.lineage.power</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>ILineagePower</name>
+            <instance>default</instance>
+        </interface>
+    </hal>
+    <hal format="hidl">
         <name>vendor.qti.hardware.alarm</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
         <interface>
-            <instance>default</instance>
             <name>IAlarm</name>
+            <instance>default</instance>
         </interface>
     </hal>
     <hal format="hidl">
@@ -496,4 +505,17 @@
          </interface>
          <fqname>@1.0::IPerf/default</fqname>
      </hal>
+    <hal format="hidl">
+        <name>com.qualcomm.qti.wifidisplayhal</name>
+        <transport>hwbinder</transport>
+        <version>1.0</version>
+        <interface>
+            <name>IDSManager</name>
+            <instance>wifidisplaydshal</instance>
+        </interface>
+        <interface>
+            <name>IHDCPSession</name>
+            <instance>wifidisplayhdcphal</instance>
+        </interface>
+    </hal>
 </manifest>

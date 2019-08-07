@@ -57,16 +57,6 @@ TARGET_KERNEL_HEADER_ARCH := arm64
 TARGET_KERNEL_SOURCE := kernel/xiaomi/msm8956
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
 
-# Hal's
-TARGET_QCOM_AUDIO_VARIANT := caf-msm8952
-TARGET_QCOM_DISPLAY_VARIANT := caf-msm8952
-TARGET_QCOM_MEDIA_VARIANT := caf-msm8952
-
-PRODUCT_SOONG_NAMESPACES += \
-    hardware/qcom/display-$(TARGET_QCOM_DISPLAY_VARIANT) \
-    hardware/qcom/audio-$(TARGET_QCOM_AUDIO_VARIANT) \
-    hardware/qcom/media-$(TARGET_QCOM_MEDIA_VARIANT)
-
 # ANT+
 BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
 
@@ -176,8 +166,6 @@ DEVICE_MATRIX_FILE   := $(VENDOR_PATH)/compatibility_matrix.xml
 
 # exFat
 TARGET_EXFAT_DRIVER := exfat
-# Network Routing
-TARGET_NEEDS_NETD_DIRECT_CONNECT_RULE := true
 
 # FM
 BOARD_HAVE_QCOM_FM := true
@@ -229,7 +217,7 @@ USE_OPENGL_RENDERER := true
 # RIL
 TARGET_PROVIDES_QTI_TELEPHONY_JAR := true
 PROTOBUF_SUPPORTED := true
-#TARGET_RIL_VARIANT := caf
+TARGET_RIL_VARIANT := caf
 USE_DEVICE_SPECIFIC_DATA_IPA_CFG_MGR := true
 TARGET_USES_ALTERNATIVE_MANUAL_NETWORK_SELECT := true
 
@@ -241,6 +229,7 @@ TARGET_LD_SHIM_LIBS := \
 #include device/qcom/sepolicy/sepolicy.mk
 #include device/qcom/sepolicy/legacy-sepolicy.mk
 #BOARD_SEPOLICY_DIRS += $(VENDOR_PATH)/sepolicy
+SELINUX_IGNORE_NEVERALLOWS := true
 
 # Thermal
 USE_DEVICE_SPECIFIC_THERMAL := true
