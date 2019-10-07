@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# TEMPORARY_DISABLE_PATH_RESTRICTIONS=true
 
 VENDOR_PATH := device/xiaomi/msm8956-common
 
@@ -46,7 +47,7 @@ TARGET_NO_BOOTLOADER := true
 
 # Kernel
 BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci lpm_levels.sleep_disabled=1 ramoops_memreserve=4M
-BOARD_KERNEL_CMDLINE += loop.max_part=7
+# BOARD_KERNEL_CMDLINE += loop.max_part=7
 BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_PAGESIZE := 2048
@@ -56,6 +57,16 @@ TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_HEADER_ARCH := arm64
 TARGET_KERNEL_SOURCE := kernel/xiaomi/msm8956
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
+
+# Hal's
+TARGET_QCOM_AUDIO_VARIANT := caf
+TARGET_QCOM_DISPLAY_VARIANT := caf
+TARGET_QCOM_MEDIA_VARIANT := caf
+
+PRODUCT_SOONG_NAMESPACES += \
+    hardware/qcom/display-$(TARGET_QCOM_DISPLAY_VARIANT)/msm8952 \
+    hardware/qcom/audio-$(TARGET_QCOM_DISPLAY_VARIANT)/msm8952 \
+    hardware/qcom/media-$(TARGET_QCOM_DISPLAY_VARIANT)/msm8952
 
 # ANT+
 BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
@@ -100,7 +111,6 @@ QCOM_BT_USE_BTNV := true
 QCOM_BT_USE_SMD_TTY := true
 
 # Camera
-TARGET_USES_QTI_CAMERA_DEVICE := true
 BOARD_QTI_CAMERA_32BIT_ONLY := true
 USE_DEVICE_SPECIFIC_CAMERA := true
 BOARD_USES_SNAPDRAGONCAMERA_VERSION := 2
@@ -118,16 +128,10 @@ BOARD_USES_QCNE := true
 # Dex
 ifeq ($(HOST_OS),linux)
   ifneq ($(TARGET_BUILD_VARIANT),eng)
-    ifeq ($(WITH_DEXPREOPT),)
-      WITH_DEXPREOPT := true
-      WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
-      DONT_DEXPREOPT_PREBUILTS := true
-      USE_DEX2OAT_DEBUG := false
-      WITH_DEXPREOPT_DEBUG_INFO := false
-    endif
+    WITH_DEXPREOPT ?= true
   endif
 endif
-PRODUCT_DEXPREOPT_SPEED_APPS += SystemUI
+WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY ?= true
 
 # Display
 BOARD_USES_ADRENO := true
@@ -177,9 +181,9 @@ USE_DEVICE_SPECIFIC_LOC_API := true
 TARGET_NO_RPC := true
 
 # Init
-TARGET_INIT_VENDOR_LIB := libinit_msm
+#TARGET_INIT_VENDOR_LIB := libinit_msm
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
-TARGET_RECOVERY_DEVICE_MODULES := libinit_msm
+#TARGET_RECOVERY_DEVICE_MODULES := libinit_msm
 
 # Keymaster
 TARGET_PROVIDES_KEYMASTER := true
@@ -219,7 +223,7 @@ TARGET_PROVIDES_QTI_TELEPHONY_JAR := true
 PROTOBUF_SUPPORTED := true
 TARGET_RIL_VARIANT := caf
 USE_DEVICE_SPECIFIC_DATA_IPA_CFG_MGR := true
-TARGET_USES_ALTERNATIVE_MANUAL_NETWORK_SELECT := true
+TARGET_USES_OLD_MNC_FORMAT := true
 
 # Shims
 TARGET_LD_SHIM_LIBS := \
@@ -229,7 +233,6 @@ TARGET_LD_SHIM_LIBS := \
 #include device/qcom/sepolicy/sepolicy.mk
 #include device/qcom/sepolicy/legacy-sepolicy.mk
 #BOARD_SEPOLICY_DIRS += $(VENDOR_PATH)/sepolicy
-SELINUX_IGNORE_NEVERALLOWS := true
 
 # Thermal
 USE_DEVICE_SPECIFIC_THERMAL := true

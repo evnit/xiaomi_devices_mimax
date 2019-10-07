@@ -17,9 +17,12 @@
 
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
+DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay-lineage
 
 # Get non-open-source specific aspects
 $(call inherit-product-if-exists, vendor/xiaomi/msm8956-common/msm8956-common-vendor.mk)
+
+# $(call inherit-product, vendor/aicp/config/phone-xxhdpi-2048-hwui-memory.mk)
 
 # Screen density
 PRODUCT_AAPT_CONFIG := normal
@@ -27,8 +30,6 @@ PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 
 # Boot animation
 TARGET_BOOT_ANIMATION_RES := 1080
-TARGET_SCREEN_WIDTH := 1080
-TARGET_SCREEN_HEIGHT := 1920
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -101,7 +102,6 @@ PRODUCT_PACKAGES += \
     libaudio-resampler \
     libaudioroute \
     libqcompostprocbundle \
-    libaacwrapper \
     libqcomvisualizer \
     libqcomvoiceprocessing \
     libtinycompress \
@@ -337,7 +337,7 @@ PRODUCT_PACKAGES += \
     libxml2
 
 # QTI performance
-PRODUCT_BOOT_JARS += \
+#PRODUCT_BOOT_JARS += \
     QPerformance \
     UxPerformance
 
@@ -487,10 +487,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     libnl \
     libbson
-
-# Service tracker
-PRODUCT_PACKAGES += \
-    vendor.qti.hardware.servicetracker@1.0
 
 # GApps
 # $(call inherit-product-if-exists, vendor/gapps/config.mk)
