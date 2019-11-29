@@ -24,10 +24,6 @@ ifeq ($(strip $(TARGET_USES_ION)),true)
     LOCAL_CFLAGS += -DUSE_ION
 endif
 
-ifneq (,$(filter  msm8610,$(TARGET_BOARD_PLATFORM)))
-    LOCAL_CFLAGS+= -DLOAD_ADSP_RPC_LIB
-endif
-
 DUAL_JPEG_TARGET_LIST := msm8974
 DUAL_JPEG_TARGET_LIST += msm8994
 
@@ -56,7 +52,6 @@ LOCAL_SRC_FILES := \
     src/mm_jpeg_mpo_composer.c
 
 LOCAL_MODULE           := libmmjpeg_interface
-LOCAL_PRELINK_MODULE   := false
 LOCAL_SHARED_LIBRARIES := libdl libcutils liblog libqomx_core
 LOCAL_MODULE_TAGS := optional
 LOCAL_VENDOR_MODULE := true

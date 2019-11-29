@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# TEMPORARY_DISABLE_PATH_RESTRICTIONS=true
 
 VENDOR_PATH := device/xiaomi/msm8956-common
 
@@ -37,9 +36,10 @@ TARGET_CPU_CORTEX_A53 := true
 
 TARGET_BOARD_PLATFORM := msm8952
 TARGET_BOARD_PLATFORM_GPU := qcom-adreno510
-
+BUILD_BROKEN_DUP_RULES := true
 TARGET_USES_64_BIT_BINDER := true
 ENABLE_CPUSETS := true
+BUILD_BROKEN_PHONY_TARGETS := true
 
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := msm8952
@@ -47,7 +47,7 @@ TARGET_NO_BOOTLOADER := true
 
 # Kernel
 BOARD_KERNEL_CMDLINE := androidboot.hardware=qcom ehci-hcd.park=3 androidboot.bootdevice=7824900.sdhci lpm_levels.sleep_disabled=1 ramoops_memreserve=4M
-# BOARD_KERNEL_CMDLINE += loop.max_part=7
+BOARD_KERNEL_CMDLINE += loop.max_part=7
 BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 BOARD_KERNEL_BASE := 0x80000000
 BOARD_KERNEL_PAGESIZE := 2048
@@ -56,17 +56,7 @@ BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_HEADER_ARCH := arm64
 TARGET_KERNEL_SOURCE := kernel/xiaomi/msm8956
-TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
-
-# Hal's
-# TARGET_QCOM_AUDIO_VARIANT := caf
-# TARGET_QCOM_DISPLAY_VARIANT := caf
-# TARGET_QCOM_MEDIA_VARIANT := caf
-
-# PRODUCT_SOONG_NAMESPACES += \
-#    hardware/qcom/display-$(TARGET_QCOM_DISPLAY_VARIANT)/msm8952 \
-#    hardware/qcom/audio-$(TARGET_QCOM_DISPLAY_VARIANT)/msm8952 \
-#    hardware/qcom/media-$(TARGET_QCOM_DISPLAY_VARIANT)/msm8952
+#TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
 
 # ANT+
 BOARD_ANT_WIRELESS_DEVICE := "vfs-prerelease"
@@ -103,11 +93,9 @@ USE_CUSTOM_AUDIO_POLICY := 1
 USE_XML_AUDIO_POLICY_CONF := 1
 
 # Bluetooth
-BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_QCOM := true
-BLUETOOTH_HCI_USE_MCT := true
 QCOM_BT_USE_BTNV := true
-QCOM_BT_USE_SMD_TTY := true
+TARGET_USE_QTI_BT_STACK := true
 
 # Camera
 BOARD_QTI_CAMERA_32BIT_ONLY := true
@@ -115,22 +103,21 @@ USE_DEVICE_SPECIFIC_CAMERA := true
 BOARD_USES_SNAPDRAGONCAMERA_VERSION := 2
 TARGET_TS_MAKEUP := true
 TARGET_PROCESS_SDK_VERSION_OVERRIDE := \
-    /system/bin/mm-qcamera-daemon=23
+    /vendor/bin/mm-qcamera-daemon=23
 
 # Charger
 BOARD_CHARGER_ENABLE_SUSPEND := true
 WITH_CUSTOM_CHARGER := false
 
-# CNE
-BOARD_USES_QCNE := true
-
 # Dex
 ifeq ($(HOST_OS),linux)
   ifneq ($(TARGET_BUILD_VARIANT),eng)
-    WITH_DEXPREOPT ?= true
+    ifeq ($(WITH_DEXPREOPT),)
+      WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := false
+      WITH_DEXPREOPT := true
+    endif
   endif
 endif
-WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY ?= true
 
 # Display
 BOARD_USES_ADRENO := true
@@ -160,8 +147,19 @@ BOARD_CACHEIMAGE_FILE_SYSTEM_TYPE := ext4
 BOARD_CACHEIMAGE_PARTITION_SIZE := 268435456
 BOARD_PERSISTIMAGE_PARTITION_SIZE := 33554432
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 67108864
+BOARD_VENDORIMAGE_PARTITION_SIZE := 536870912
+BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
+TARGET_COPY_OUT_VENDOR := vendor
 
 TARGET_FS_CONFIG_GEN := $(VENDOR_PATH)/config.fs
+
+BOARD_ROOT_EXTRA_SYMLINKS := \
+    /mnt/vendor/persist:/persist \
+    /vendor/dsp:/dsp \
+    /vendor/firmware_mnt:/firmware
+
+BOARD_ROOT_EXTRA_FOLDERS := \
+    /vendor
 
 # HIDL
 DEVICE_MANIFEST_FILE := $(VENDOR_PATH)/manifest.xml
@@ -180,16 +178,15 @@ USE_DEVICE_SPECIFIC_LOC_API := true
 TARGET_NO_RPC := true
 
 # Init
-TARGET_INIT_VENDOR_LIB := libinit_msm
-TARGET_RECOVERY_DEVICE_MODULES := libinit_msm
+TARGET_INIT_VENDOR_LIB := //$(VENDOR_PATH):libinit_msm
 TARGET_PLATFORM_DEVICE_BASE := /devices/soc.0/
+TARGET_RECOVERY_DEVICE_MODULES := libinit_msm
 
 # Keymaster
 TARGET_PROVIDES_KEYMASTER := true
 
 # Lights
 BOARD_LIGHTS_VARIANT := aw2013
-TARGET_PROVIDES_LIBLIGHT := true
 
 # Media
 TARGET_USES_MEDIA_EXTENSIONS := true
@@ -197,12 +194,9 @@ TARGET_USES_MEDIA_EXTENSIONS := true
 # Peripheral manager
 TARGET_PER_MGR_ENABLED := true
 
-# Power
-TARGET_HAS_NO_WLAN_STATS := true
-TARGET_RPM_SYSTEM_STAT := /d/rpm_stats
-
 # Properties
-TARGET_SYSTEM_PROP += $(VENDOR_PATH)/system.prop
+BOARD_PROPERTY_OVERRIDES_SPLIT_ENABLED := true
+TARGET_SYSTEM_PROP += $(VENDOR_PATH)/vendor.prop
 
 # Qualcomm
 BOARD_USES_QCOM_HARDWARE := true
@@ -210,28 +204,23 @@ BOARD_USES_QCOM_HARDWARE := true
 # Recovery
 TARGET_RECOVERY_FSTAB := $(VENDOR_PATH)/rootdir/etc/fstab.qcom
 TARGET_USERIMAGES_USE_EXT4 := true
-TARGET_USES_MKE2FS := true
 TARGET_USERIMAGES_USE_F2FS := true
 
-# Render
-OVERRIDE_RS_DRIVER:= libRSDriver_adreno.so
-USE_OPENGL_RENDERER := true
-
 # RIL
-TARGET_PROVIDES_QTI_TELEPHONY_JAR := true
 PROTOBUF_SUPPORTED := true
-TARGET_RIL_VARIANT := caf
 USE_DEVICE_SPECIFIC_DATA_IPA_CFG_MGR := true
-TARGET_USES_OLD_MNC_FORMAT := true
+TARGET_USES_ALTERNATIVE_MANUAL_NETWORK_SELECT := true
 
 # Shims
 TARGET_LD_SHIM_LIBS := \
     /system/lib64/lib-imsvideocodec.so|libshim_ims.so
 
 # SELinux
-#include device/qcom/sepolicy/sepolicy.mk
-#include device/qcom/sepolicy/legacy-sepolicy.mk
-#BOARD_SEPOLICY_DIRS += $(VENDOR_PATH)/sepolicy
+include device/qcom/sepolicy-legacy-um/sepolicy.mk
+BOARD_PLAT_PRIVATE_SEPOLICY_DIR += $(VENDOR_PATH)/sepolicy/private
+BOARD_SEPOLICY_DIRS += $(VENDOR_PATH)/sepolicy/vendor
+#BOARD_SEPOLICY_DIRS += $(VENDOR_PATH)/sepolicy-minimal
+SELINUX_IGNORE_NEVERALLOWS := true
 
 # Thermal
 USE_DEVICE_SPECIFIC_THERMAL := true
@@ -250,7 +239,7 @@ BOARD_HOSTAPD_DRIVER        := NL80211
 BOARD_HOSTAPD_PRIVATE_LIB   := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 WIFI_DRIVER_FW_PATH_AP      := "ap"
 WIFI_DRIVER_FW_PATH_STA     := "sta"
-TARGET_USES_AOSP_WFD        := true
+WIFI_HIDL_FEATURE_DISABLE_AP_MAC_RANDOMIZATION := true
 
 # Inherit from the proprietary version
 -include vendor/xiaomi/msm8956-common/BoardConfigVendor.mk

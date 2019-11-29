@@ -82,7 +82,7 @@ start_vm_bms()
 
 start_msm_irqbalance_8939()
 {
-	if [ -f /system/vendor/bin/msm_irqbalance ]; then
+	if [ -f /vendor/bin/msm_irqbalance ]; then
 		case "$platformid" in
 		    "239" | "293" | "294" | "295" | "304" | "313" | "338" | "351" )
 			start vendor.msm_irqbalance;;
@@ -92,7 +92,7 @@ start_msm_irqbalance_8939()
 
 start_msm_irqbalance_8952()
 {
-        if [ -f /system/vendor/bin/msm_irqbalance ]; then
+        if [ -f /vendor/bin/msm_irqbalance ]; then
                 case "$platformid" in
                      "241" | "263" | "264" | "268" | "269" | "270" | "271")
                         start vendor.msm_irqbalance;;
@@ -445,14 +445,14 @@ else
     prev_version_info=""
 fi
 
-cur_version_info=`cat /firmware/verinfo/ver_info.txt`
-if [ ! -f /firmware/verinfo/ver_info.txt -o "$prev_version_info" != "$cur_version_info" ]; then
+cur_version_info=`cat /vendor/firmware_mnt/verinfo/ver_info.txt`
+if [ ! -f /vendor/firmware_mnt/verinfo/ver_info.txt -o "$prev_version_info" != "$cur_version_info" ]; then
     rm -rf /data/vendor/radio/modem_config
     mkdir /data/vendor/radio/modem_config
     chmod 770 /data/vendor/radio/modem_config
-    cp -r /firmware/image/modem_pr/mcfg/configs/* /data/vendor/radio/modem_config
+    cp -r /vendor/firmware_mnt/image/modem_pr/mcfg/configs/* /data/vendor/radio/modem_config
     chown -hR radio.radio /data/vendor/radio/modem_config
-    cp /firmware/verinfo/ver_info.txt /data/vendor/radio/ver_info.txt
+    cp /vendor/firmware_mnt/verinfo/ver_info.txt /data/vendor/radio/ver_info.txt
     chown radio.radio /data/vendor/radio/ver_info.txt
 fi
 
