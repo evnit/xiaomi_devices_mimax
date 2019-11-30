@@ -353,32 +353,25 @@ PRODUCT_PACKAGES += \
 
 # RIL
 PRODUCT_PACKAGES += \
-    telephony-ext
-
-PRODUCT_BOOT_JARS += \
-    telephony-ext
-
-# RIL
-PRODUCT_PACKAGES += \
     android.hardware.radio@1.0 \
-    android.hardware.radio@1.1 \
-    android.hardware.radio@1.2 \
     android.hardware.radio.config@1.0 \
-    android.hardware.radio.config@1.1 \
-    android.hardware.radio.config@1.2 \
     android.hardware.secure_element@1.0 \
     librmnetctl \
     libcnefeatureconfig \
     libxml2 \
+    telephony-ext \
+    ims-ext-common \
+    rild \
+    libprotobuf-cpp-full \
     qti-telephony-hidl-wrapper \
     qti_telephony_hidl_wrapper.xml \
     qti-telephony-utils \
-    qti_telephony_utils.xml
-
-# IMS
-PRODUCT_PACKAGES += \
-    ims-ext-common \
+    qti_telephony_utils.xml \
     ims_ext_common.xml
+
+PRODUCT_BOOT_JARS += \
+    telephony-ext \
+    ims-ext-common
 
 # Seccomp policy
 PRODUCT_COPY_FILES += \

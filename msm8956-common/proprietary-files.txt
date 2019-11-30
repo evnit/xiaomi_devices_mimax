@@ -520,6 +520,7 @@ lib/libqdMetaData.system.so
 lib/libadsprpc.so
 lib/libqti-perfd-client_system.so
 lib/libDiracAPI_SHARED.so
+lib/libgiftranscode.so
 lib/libsmwrapper.so
 lib/librcc.so
 lib/libqvr_adsp_driver_stub.so
@@ -546,6 +547,8 @@ lib/extractors/libmmparserextractor.so
 lib/libmmparser_lite.so
 lib/libwfdcommonutils.so
 lib/libwfdmminterface.so
+product/filenames.txt
+product/dpm.txt
 priv-app/qcrilmsgtunnel/qcrilmsgtunnel.apk
 priv-app/dpmserviceapp/dpmserviceapp.apk
 priv-app/ims/ims.apk
@@ -589,10 +592,15 @@ lib64/vendor.qti.hardware.qdutils_disp@1.0.so
 lib64/libqti_performance.so
 lib64/vendor.display.color@1.0.so
 lib64/com.qualcomm.qti.imscmservice@1.0.so
+lib64/com.quicinc.cne.constants@2.0.so
 lib64/lib-imsvt.so
+lib64/libcryptfs_hw.so
+lib64/libjni_gallery_eglfence.so
+lib64/com.quicinc.cne.api@1.1.so
 lib64/vendor.qti.gnss@1.0.so
 lib64/vendor.display.postproc@1.0.so
 lib64/libdpmctmgr.so
+lib64/com.quicinc.cne.constants@1.0.so
 lib64/soundfx/libasphere.so
 lib64/libFileMux.so
 lib64/libdiag_system.so
@@ -606,7 +614,10 @@ lib64/vendor.qti.hardware.iop@1.0.so
 lib64/libqdMetaData.system.so
 lib64/libadsprpc.so
 lib64/libqti-perfd-client_system.so
+lib64/libgiftranscode.so
+lib64/com.quicinc.cne.api@1.0.so
 lib64/librcc.so
+lib64/vendor.qti.hardware.cryptfshw@1.0.so
 lib64/libdpmframework.so
 lib64/vendor.qti.imsrtpservice@1.0.so
 lib64/libqti-at.so
@@ -621,6 +632,7 @@ lib64/libvpplibrary.so
 lib64/com.qualcomm.qti.dpm.api@1.0.so
 lib64/libdpmfdmgr.so
 lib64/lib-imsvtutils.so
+lib64/com.quicinc.cne.constants@2.1.so
 lib64/libimsmedia_jni.so
 lib64/libdpmtcm.so
 lib64/libqti-iopd-client_system.so
