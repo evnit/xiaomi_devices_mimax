@@ -489,6 +489,18 @@ on property:vold.decrypt=trigger_restart_framework
     start vendor.wcnss-service
     start config_bt_addr
 
+service vendor.cnd /system/vendor/bin/cnd
+    class main
+    user system
+    group system wifi inet radio wakelock net_admin
+    writepid /dev/cpuset/system-background/tasks
+
+service vendor.dpmQmiMgr /system/vendor/bin/dpmQmiMgr	
+    class main	
+    user system	
+    group radio system	
+    writepid /dev/cpuset/system-background/tasks
+
 service vendor.irsc_util /vendor/bin/irsc_util "/vendor/etc/sec_config"
     class core
     user root
@@ -539,6 +551,23 @@ service vendor.qmuxd /vendor/bin/qmuxd
     class main
     user root
     group radio audio bluetooth gps nfc diag
+    writepid /dev/cpuset/system-background/tasks
+
+service vendor.netmgrd /system/vendor/bin/netmgrd
+    class main
+    group root wifi wakelock radio inet oem_2901
+    writepid /dev/cpuset/system-background/tasks
+
+service vendor.ipacm /system/vendor/bin/ipacm
+    class main
+    user radio
+    group radio inet
+    writepid /dev/cpuset/system-background/tasks
+
+service vendor.dataqti system/vendor/bin/qti
+    class main
+    user radio
+    group radio oem_2901 diag usb net_admin
     writepid /dev/cpuset/system-background/tasks
 
 service vendor.sensors.qti /vendor/bin/sensors.qti
@@ -634,8 +663,8 @@ on charger
     start vendor.qcom-post-boot
 
 on property:init.svc.surfaceflinger=restarting
-    stop vendor.hwcomposer-2-3
-    start vendor.hwcomposer-2-3
+    stop vendor.hwcomposer-2-1
+    start vendor.hwcomposer-2-1
 
 service vendor.time_daemon /vendor/bin/time_daemon
     class main
