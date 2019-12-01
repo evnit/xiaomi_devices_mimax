@@ -21,7 +21,7 @@ DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 $(call inherit-product-if-exists, vendor/xiaomi/hydrogen/hydrogen-vendor.mk)
 
 # Device Properties
--include $(LOCAL_PATH)/prop.mk
+#-include $(LOCAL_PATH)/prop.mk
 
 # Audio
 PRODUCT_COPY_FILES += \

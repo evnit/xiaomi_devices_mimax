@@ -287,7 +287,7 @@ firmware_directories /vendor/firmware_mnt/image/
 /dev/block/platform/soc.0/7824900.sdhci/by-name/config    0600   system     system
 
 # Kmsg device
-/dev/kmsg                                               0620   root       system 
+/dev/kmsg                                               0620   root       system
 
 # For lirc
 /dev/lirc0          0660   system     system

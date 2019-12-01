@@ -73,6 +73,9 @@ persist.data.iwlan.enable=true
 # FRP
 ro.frp.pst=/dev/block/platform/soc.0/7824900.sdhci/by-name/config
 
+# Fingerprint
+ro.hardware.fingerprint=fpc
+
 # GPS
 persist.gps.qc_nlp_in_use=1
 persist.loc.nlp_name=com.qualcomm.location

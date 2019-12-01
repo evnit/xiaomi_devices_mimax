@@ -8,6 +8,4 @@ $(call add-clean-step, find $(PRODUCT_OUT) -name '*CNEService*' | xargs rm -rf)
 $(call add-clean-step, find $(PRODUCT_OUT) -name '*ims*' | xargs rm -rf)
 $(call add-clean-step, find $(PRODUCT_OUT) -name '*qcrilmsgtunnel*' | xargs rm -rf)
 
-
-
-
+$(call add-clean-step, find $(PRODUCT_OUT) -name '*perf-profile*' | xargs rm -rf)
