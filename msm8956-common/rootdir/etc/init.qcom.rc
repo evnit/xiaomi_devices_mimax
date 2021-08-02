@@ -34,6 +34,9 @@ on early-init
     chown root system /dev/kmsg
     chmod 0620 /dev/kmsg
 
+# zram setup
+    write /proc/sys/vm/page-cluster 0
+    
 on init
     # Create cgroup mount point for memory
     mkdir /sys/fs/cgroup/memory/bg 0750 root system
@@ -153,7 +156,7 @@ on boot
     # an ack packet comes out of order
     write /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal 1
 
-    # Set the console loglevel to < KERN_INFO
+    # Set the console loglevel to KERN_INFO
     # Set the default message loglevel to KERN_INFO
     write /proc/sys/kernel/printk "6 6 1 7"
 
@@ -211,10 +214,15 @@ on boot
     chown system system /sys/class/leds/green/led_time
     chown system system /sys/class/leds/blue/led_time
 
+    # Torch
+    chown system system /sys/class/leds/flashlight/brightness
+    chmod 0666 /sys/class/leds/flashlight/brightness
+
     # Update foreground cpuset now that processors are up
     # reserve CPU 3 for the top app and camera daemon
     write /dev/cpuset/foreground/cpus 0-2,4-5
     write /dev/cpuset/background/cpus 0
+    write /dev/cpuset/restricted/cpus 0-3
     write /dev/cpuset/system-background/cpus 0-2
     write /dev/cpuset/top-app/cpus 0-5
 
@@ -276,6 +284,10 @@ on post-fs-data
     mkdir /data/vendor/bluetooth 0770 bluetooth bluetooth
     mkdir /data/vendor/ramdump/bluetooth 0770 bluetooth bluetooth
 
+    # Create directory for tftp
+    mkdir /data/vendor/tombstones 0771 system system
+    mkdir /data/vendor/tombstones/rfs 0771 system system
+
     # Create the directories used by the Wireless subsystem
     mkdir /data/vendor/wifi 0770 wifi wifi
     mkdir /data/vendor/wifi/sockets 0770 wifi wifi
@@ -315,11 +327,15 @@ on post-fs-data
     # Create directory for radio
     mkdir /data/vendor/radio 0770 system radio
 
+   # Create directory for modem_config
+    mkdir /data/vendor/modem_config 0570 radio root
+
     # Mounting of persist is moved to 'on emmc-fs' and 'on fs' sections
     # We chown/chmod /persist again so because mount is run as root + defaults
-    chown root system /persist
-    chmod 0771 /persist
-    chown system system /persist/WCNSS_qcom_wlan_nv.bin
+    # Set permissions for persist partition
+    chown root system /mnt/vendor/persist
+    chmod 0771 /mnt/vendor/persist
+    chown system system /mnt/vendor/persist/WCNSS_qcom_wlan_nv.bin
     chmod 0664 /sys/devices/platform/msm_sdcc.1/polling
     chmod 0664 /sys/devices/platform/msm_sdcc.2/polling
     chmod 0664 /sys/devices/platform/msm_sdcc.3/polling
@@ -379,6 +395,10 @@ on post-fs-data
     mkdir /data/camera 0770 media camera
 
     #Create FM dir for patchdownloader
+    mkdir /data/vendor/fm 0770 system system
+    chmod 0770 /data/vendor/fm
+
+    #Create FM dir for patchdownloader
     mkdir /data/misc/fm 0770 system system
     chmod 0770 /data/misc/fm
 
@@ -387,31 +407,13 @@ on post-fs-data
     chmod 2770 /data/vendor/perfd
     rm /data/vendor/perfd/default_values
 
-    # NFC local data and nfcee xml storage
-    mkdir /data/nfc 0770 nfc nfc
-    mkdir /data/nfc/param 0770 nfc nfc
-
-    # for backward compatibility
-    chown system system /persist/sensors
-    chown system system /persist/sensors/registry
-    chown system system /persist/sensors/registry/registry
-    chown system system /persist/sensors/registry/registry/sensors_registry
-    chown system system /persist/sensors/sensors_settings
-    chown system system /persist/sensors/registry/config
-    chmod 0664 /persist/sensors/sensors_settings
-
     # Sensor
-    chown system system /mnt/vendor/persist/sensors
-    chown system system /mnt/vendor/persist/sensors/sns.reg
-    chown system system /mnt/vendor/persist/sensors/sensors_list.txt
-    chown system system /mnt/vendor/persist/sensors/registry
-    chown system system /mnt/vendor/persist/sensors/registry/registry
-    chown system system /mnt/vendor/persist/sensors/registry/registry/sensors_registry
-    chown system system /mnt/vendor/persist/sensors/sensors_settings
-    chown system system /mnt/vendor/persist/sensors/registry/sns_reg_config
-    chown system system /mnt/vendor/persist/sensors/registry/sns_reg_version
-    chown system system /mnt/vendor/persist/sensors/registry/config
+    chmod 0775 /mnt/vendor/persist/sensors
     chmod 0664 /mnt/vendor/persist/sensors/sensors_settings
+    chown system root /mnt/vendor/persist/sensors/sensors_settings
+    mkdir /mnt/vendor/persist/sensors/registry/registry
+    mkdir /data/misc/sensors
+    chmod 0775 /data/misc/sensors
 
     #Create IOP deamon related dirs
     mkdir /data/vendor/iop 0770 root system
@@ -461,13 +463,6 @@ on post-fs-data
     # Enable hvdcp
     setprop persist.hvdcp.allow_opti 1
 
-service iop /vendor/bin/iop
-    class main
-    user root
-    group root
-    disabled
-    socket iop seqpacket 0666 root system
-
 on property:sys.boot_completed=1
     write /dev/kmsg "Boot completed"
     #WDSP FW boot sysfs node used by STHAL
@@ -476,6 +471,9 @@ on property:sys.boot_completed=1
 
     # Enable ZRAM on boot_complete
     swapon_all /vendor/etc/fstab.qcom
+
+on property:dev.bootcomplete=1
+    restart ril-daemon
 
 on property:vold.decrypt=trigger_restart_framework
     restart vendor.camera-provider-2-4
@@ -533,17 +531,17 @@ service config_bt_addr /vendor/bin/btnvtool -O
     oneshot
 
 # FM
-on property:vendor.hw.fm.init=0
+on property:hw.fm.init=0
     write /sys/module/radio_iris_transport/parameters/fmsmd_set 0
 
-on property:vendor.hw.fm.init=1
+on property:hw.fm.init=1
     write /sys/module/radio_iris_transport/parameters/fmsmd_set 1
 
 # QMUX must be in multiple groups to support external process connections
 service vendor.qmuxd /vendor/bin/qmuxd
     class main
     user root
-    group radio audio bluetooth gps nfc diag
+    group radio audio bluetooth gps nfc oem_2901
     writepid /dev/cpuset/system-background/tasks
 
 service vendor.netmgrd /system/vendor/bin/netmgrd
@@ -552,7 +550,7 @@ service vendor.netmgrd /system/vendor/bin/netmgrd
     writepid /dev/cpuset/system-background/tasks
 
 service vendor.ipacm /system/vendor/bin/ipacm
-    class main
+    class late_start
     user radio
     group radio inet
     writepid /dev/cpuset/system-background/tasks
@@ -563,10 +561,10 @@ service vendor.dataqti system/vendor/bin/qti
     group radio oem_2901 diag usb net_admin
     writepid /dev/cpuset/system-background/tasks
 
-service vendor.sensors.qti /vendor/bin/sensors.qti
+service sensors /vendor/bin/sensors.qti
     class core
-    user system
-    group system
+    user root
+    group root system input
     writepid /dev/cpuset/system-background/tasks
 
 on property:ro.vendor.use_data_netmgrd=false
@@ -602,9 +600,10 @@ service loc_launcher /vendor/bin/loc_launcher
     group gps inet diag wifi
     writepid /dev/cpuset/system-background/tasks
 
-service vendor.qcom-sh /vendor/bin/init.qcom.sh
+service qcom-sh /vendor/bin/init.qcom.sh
     class late_start
     user root
+    group root system radio
     oneshot
 
 service vendor.qcom-post-boot /vendor/bin/init.qcom.post_boot.sh
@@ -625,17 +624,18 @@ on property:ro.data.large_tcp_window_size=true
     # Adjust socket buffer to enlarge TCP receive window for high bandwidth (e.g. DO-RevB)
     write /proc/sys/net/ipv4/tcp_adv_win_scale  2
 
-service vendor.ril-daemon2 /vendor/bin/hw/rild -c 2
+service ril-daemon2 /system/vendor/bin/hw/rild  -c 2
     class main
     socket rild2 stream 660 root radio
     socket rild-debug2 stream 660 radio system
-    user radio
-    group radio cache inet misc audio sdcard_r sdcard_rw diag log
-    capabilities BLOCK_SUSPEND NET_ADMIN NET_RAW
+    user root
+    group radio cache inet misc audio sdcard_r sdcard_rw diag log net_raw
 
-service charger /sbin/chargeonlymode
+service charger /system/bin/charger
     class charger
-    group system graphics
+    user system
+    group system graphics input
+    capabilities SYS_BOOT
     seclabel u:r:charger:s0
 
 service vendor.msm_irqbalance /vendor/bin/msm_irqbalance -f /vendor/etc/msm_irqbalance.conf
@@ -652,23 +652,8 @@ service vendor.msm_irqbal_lb /vendor/bin/msm_irqbalance -f /vendor/etc/msm_irqba
 
 on charger
     setprop persist.sys.usb.config mass_storage
-    load_system_props
     start vendor.qcom-post-boot
 
 on property:init.svc.surfaceflinger=restarting
     stop vendor.hwcomposer-2-1
     start vendor.hwcomposer-2-1
-
-service vendor.time_daemon /vendor/bin/time_daemon
-    class main
-    user root
-    group root
-
-service vendor.power_off_alarm /vendor/bin/power_off_alarm
-    class core
-    group system
-    disabled
-    oneshot
-
-on property:apexd.status=ready
-    symlink /system/lib64/libashmemd_client.so /system/apex/com.android.media.swcodec/lib64/libashmemd_client.so

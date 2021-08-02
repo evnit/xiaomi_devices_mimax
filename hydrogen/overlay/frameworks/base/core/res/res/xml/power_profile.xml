@@ -49,7 +49,6 @@
      <!-- Additional power used when GPS is acquiring a signal -->	
 	<item name="gps.on">27</item>
   
-
     <!-- Different CPU speeds as reported in
          /sys/devices/system/cpu/cpu0/cpufreq/stats/time_in_state -->
     <array name="cpu.speeds.cluster0">

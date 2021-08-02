@@ -52,7 +52,7 @@ on post-fs-data
 mkdir /data/vendor/camera 0770 camera camera
 
 #start camera server as daemon
-service qcamerasvr /system/bin/mm-qcamera-daemon
+service qcamerasvr /vendor/bin/mm-qcamera-daemon
     class late_start
     user camera
     group camera system inet input graphics
@@ -67,7 +67,7 @@ on property:persist.usb.chgdisabled=1
 on property:persist.usb.chgdisabled=0
     write /sys/class/power_supply/battery/charging_enabled 1
 
-service vendor.qseecomd /vendor/bin/qseecomd
+service qseecomd /vendor/bin/qseecomd
    class core
    user root
    group root
@@ -84,7 +84,7 @@ service vendor.thermal-engine /vendor/bin/thermal-engine
 on boot
     start vendor.rmt_storage
    
-service wcnss-service /system/bin/wcnss_service
+service wcnss-service /vendor/bin/wcnss_service
     class main
     user system
     group system wifi radio
@@ -124,7 +124,6 @@ on property:vendor.ims.DATA_DAEMON_STATUS=1
     restart vendor.ims_rtp_daemon
 
 on charger
-    load_system_props
     setprop persist.sys.usb.config mass_storage
     start vendor.qcom-post-boot
     setprop persist.sys.usb.config mass_storage
@@ -152,6 +151,17 @@ service vendor.per_proxy /vendor/bin/pm-proxy
     user system
     group system
     disabled
+
+service vendor.time_daemon /vendor/bin/time_daemon
+    class main
+    user root
+    group root
+
+service vendor.power_off_alarm /vendor/bin/power_off_alarm
+    class core
+    group system
+    disabled
+    oneshot
 
 on property:init.svc.vendor.per_mgr=running
     start vendor.per_proxy

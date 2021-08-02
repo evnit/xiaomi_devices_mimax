@@ -72,9 +72,11 @@ echo 1 > /sys/module/process_reclaim/parameters/enable_process_reclaim
 echo 70 > /sys/module/process_reclaim/parameters/pressure_max
 echo 50 > /sys/module/process_reclaim/parameters/pressure_min
 echo 30 > /sys/module/process_reclaim/parameters/swap_opt_eff
-echo 512 > /sys/module/process_reclaim/parameters/per_swap_size
+echo 0 >  /sys/module/lowmemorykiller/parameters/lmk_fast_run
+echo 768 > /sys/module/process_reclaim/parameters/per_swap_size
 echo 0 > /sys/module/vmpressure/parameters/allocstall_threshold
-echo 100 > /proc/sys/vm/swappiness
+echo 45 > /proc/sys/vm/swappiness
+echo 0 > /proc/sys/vm/page-cluster
 
 minfree_series=`cat /sys/module/lowmemorykiller/parameters/minfree`
 minfree_1="${minfree_series#*,}" ; rem_minfree_1="${minfree_1%%,*}"
@@ -86,10 +88,6 @@ vmpres_file_min=$((minfree_5 + (minfree_5 - rem_minfree_4)))
 echo $vmpres_file_min > /sys/module/lowmemorykiller/parameters/vmpressure_file_min
 echo 1 > /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk
 
-# Enable B service adj transition
-#setprop ro.vendor.qti.sys.fw.bservice_enable true
-#setprop ro.vendor.qti.sys.fw.bservice_limit 5
-#setprop ro.vendor.qti.sys.fw.bservice_age 5000
 
 chown -h system /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
 chown -h system /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
@@ -204,6 +202,17 @@ echo 1 > /sys/module/lpm_levels/parameters/lpm_prediction
 # Enable Low power modes
 echo 0 > /sys/module/lpm_levels/parameters/sleep_disabled
 
+# Remove interaction lock when idle
+echo 100 > /sys/devices/virtual/graphics/fb0/idle_time
+
+if [ `cat /sys/devices/soc0/revision` == "1.0" ]; then
+# Disable l2-pc and l2-gdhs low power modes
+    echo N > /sys/module/lpm_levels/system/a53/a53-l2-gdhs/idle_enabled
+    echo N > /sys/module/lpm_levels/system/a72/a72-l2-gdhs/idle_enabled
+    echo N > /sys/module/lpm_levels/system/a53/a53-l2-pc/idle_enabled
+    echo N > /sys/module/lpm_levels/system/a72/a72-l2-pc/idle_enabled
+fi
+
 # Disable L2 GDHS on 8976
 echo N > /sys/module/lpm_levels/system/a53/a53-l2-gdhs/idle_enabled
 echo N > /sys/module/lpm_levels/system/a72/a72-l2-gdhs/idle_enabled
@@ -219,6 +228,9 @@ echo 50000 > /proc/sys/kernel/sched_freq_dec_notify
 # Enable timer migration to little cluster
 echo 1 > /proc/sys/kernel/power_aware_timer_migration
 
+# Start energy-awareness for 8952
+start vendor.energy-awareness
+
 #enable sched colocation and colocation inheritance
 echo 130 > /proc/sys/kernel/sched_grp_upmigrate
 echo 110 > /proc/sys/kernel/sched_grp_downmigrate
@@ -230,4 +242,4 @@ real_path=${misc_link##*>}
 setprop persist.vendor.mmi.misc_dev_path $real_path
 
 # Set BFQ as default io-schedular after boot
-setprop sys.io.scheduler "bfq"
+setprop sys.io.scheduler "cfq"

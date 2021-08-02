@@ -1,6 +1,6 @@
 #
-# Copyright (C) 2015-2016 The CyanogenMod Project
-#           (C) 2017-2018 The LineageOS Project
+# Copyright 2016 The CyanogenMod Project
+# Copyright 2017 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,14 +15,15 @@
 # limitations under the License.
 #
 
-$(call inherit-product, device/xiaomi/hydrogen/full_hydrogen.mk)
+# Inherit from those products. Most specific first.
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/product_launched_with_m.mk)
 
-TARGET_SCREEN_HEIGHT := 1920
-TARGET_SCREEN_WIDTH := 1080
-TARGET_BOOT_ANIMATION_RES := 1080
-TARGET_ARCH := arm64
-TARGET_DENSITY := xxhdpi
+# Inherit from kipper device
+$(call inherit-product, device/xiaomi/hydrogen/device.mk)
 
+# Inherit some common lineage stuff.
 $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 
 # Set those variables here to overwrite the inherited values.
@@ -36,8 +37,8 @@ TARGET_VENDOR := Xiaomi
 
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 
-# Use the latest approved GMS identifiers unless running a signed build
-PRODUCT_BUILD_PROP_OVERRIDES += \
-    PRIVATE_BUILD_DESC="hydrogen-user 6.0.1 MMB29M V8.2.3.0.MBCCNDL release-keys"
+# Build fingerprint
+BUILD_FINGERPRINT=Xiaomi/hydrogen/hydrogen:7.0/NRD90M/V10.2.2.0.NBCCNXM:user/release-keys
 
-BUILD_FINGERPRINT := Xiaomi/hydrogen/hydrogen:6.0.1/MMB29M/V8.2.3.0.MBCCNDL:user/release-keys
+PRODUCT_BUILD_PROP_OVERRIDES += \
+    PRIVATE_BUILD_DESC="hydrogen-user 7.0 NRD90M V10.2.2.0.NBCCNXM release-keys"

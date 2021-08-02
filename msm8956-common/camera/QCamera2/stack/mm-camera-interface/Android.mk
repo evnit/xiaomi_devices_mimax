@@ -25,9 +25,6 @@ ifneq (,$(filter msm8996,$(TARGET_BOARD_PLATFORM)))
 endif
 
 LOCAL_CFLAGS += -D_ANDROID_
-LOCAL_COPY_HEADERS_TO := mm-camera-interface
-LOCAL_COPY_HEADERS += ../common/cam_intf.h
-LOCAL_COPY_HEADERS += ../common/cam_types.h
 
 LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/inc \
@@ -38,7 +35,7 @@ LOCAL_CFLAGS += -DCAMERA_ION_HEAP_ID=ION_IOMMU_HEAP_ID
 LOCAL_C_INCLUDES+= $(kernel_includes)
 LOCAL_ADDITIONAL_DEPENDENCIES := $(common_deps)
 
-LOCAL_C_INCLUDES += hardware/qcom-caf/msm8952/media/mm-core/inc
+LOCAL_C_INCLUDES +=  $(call project-path-for,qcom-media)/mm-core/inc
 
 ifneq (1,$(filter 1,$(shell echo "$$(( $(PLATFORM_SDK_VERSION) >= 17 ))" )))
   LOCAL_CFLAGS += -include bionic/libc/kernel/common/linux/socket.h
@@ -46,11 +43,13 @@ ifneq (1,$(filter 1,$(shell echo "$$(( $(PLATFORM_SDK_VERSION) >= 17 ))" )))
 endif
 
 LOCAL_CFLAGS += -Wall -Wextra -Werror
+LOCAL_CLANG := true
 
 LOCAL_SRC_FILES := $(MM_CAM_FILES)
 
 LOCAL_MODULE           := libmmcamera_interface
 LOCAL_SHARED_LIBRARIES := libdl libcutils liblog libutils
+LOCAL_HEADER_LIBRARIES := camera_common_headers 
 LOCAL_MODULE_TAGS := optional
 LOCAL_VENDOR_MODULE := true
 
